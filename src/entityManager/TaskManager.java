@@ -5,13 +5,13 @@ import game.Game;
 
 public class TaskManager {
     private Game game;
-    private BulletManager bulletManager;
+    private AmmoManager ammoManager;
     private Enemy[][] enemies;
     private int enemyShotCooldown = 0;
 
     public TaskManager(Game game) {
         this.game = game;
-        this.bulletManager = game.getBulletManager();
+        this.ammoManager = game.getBulletManager();
         this.enemies = game.getEnemyManager().getEnemies();
     }
 
@@ -29,7 +29,7 @@ public class TaskManager {
             if (e == null || e.isDead()) return;
 
             if (row == EnemyManager.enemyRows - 1 || enemies[row + 1][col] == null) {
-                bulletManager.addEnemyBullet(e.getX() + ((float) e.getWidth() / 2), e.getY() + e.getHeight());
+                ammoManager.addEnemyBullet(e.getX() + ((float) e.getWidth() / 2), e.getY() + e.getHeight());
                 enemyShotCooldown = 500;
                 System.out.printf("shot %d %d\n", row, col);
             }

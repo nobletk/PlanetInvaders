@@ -1,6 +1,7 @@
 package entityManager;
 
-import entities.Bullet;
+import entities.ammo.Bomb;
+import entities.ammo.Bullet;
 import entities.Player;
 import game.Game;
 import game.GamePanel;
@@ -10,7 +11,7 @@ import physics.Collision;
 import java.awt.*;
 import java.util.LinkedList;
 
-public class BulletManager {
+public class AmmoManager {
     private Game game;
     private Player player;
     private EnemyManager enemyManager;
@@ -18,9 +19,9 @@ public class BulletManager {
     private Collision collision;
 
     private LinkedList<Bullet> playerBullets = new LinkedList<>();
-    private LinkedList<Bullet> enemyBullets = new LinkedList<>();
+    private LinkedList<Bomb> enemyBullets = new LinkedList<>();
 
-    public BulletManager(Game game) {
+    public AmmoManager(Game game) {
         this.game = game;
         this.player = game.getPlayer();
         this.enemyManager = game.getEnemyManager();
@@ -34,7 +35,7 @@ public class BulletManager {
             b.render(g);
         }
         for (int i = 0; i < enemyBullets.size(); i++) {
-            Bullet b = enemyBullets.get(i);
+            Bomb b = enemyBullets.get(i);
             b.render(g);
         }
     }
@@ -62,7 +63,7 @@ public class BulletManager {
 
     private void updateEnemyBullets() {
         for (int i = 0; i < enemyBullets.size(); i++) {
-            Bullet b = enemyBullets.get(i);
+            Bomb b = enemyBullets.get(i);
             if (b.getY() > GamePanel.getScreenHeight()) {
                 removeEnemyBullet(b);
             }
@@ -87,10 +88,10 @@ public class BulletManager {
     }
 
     public void addEnemyBullet(float x, float y) {
-        enemyBullets.add(new Bullet(x, y, 1));
+        enemyBullets.add(new Bomb(x, y, 1));
     }
 
-    public void removeEnemyBullet(Bullet b) {
+    public void removeEnemyBullet(Bomb b) {
         enemyBullets.remove(b);
     }
 }

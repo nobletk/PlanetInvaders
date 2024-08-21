@@ -19,7 +19,9 @@ public interface Enemy {
 
     int[][] getGrid();
 
-    int getBlockSize();
+    int getBlockWidth();
+
+    int getBlockHeight();
 
     int getBlockValue(int i, int j);
 
@@ -28,13 +30,6 @@ public interface Enemy {
     void render(Graphics g);
 
     void update();
-
-//    default void move() {
-//        getX() += getMovementSpeed();
-//        if( getX() <= 0 || getX() + getWidth() >= GamePanel.getScreenWidth()) {
-//            setMovementSpeed()
-//        }
-//    }
 
     default void destroy() {
         for (int i = 0; i < getGridHeight(); i++) {
@@ -45,9 +40,6 @@ public interface Enemy {
             }
         }
     }
-
-    //TODO: remove
-    void setPosition(float x, float y);
 
     boolean isDead();
 

@@ -1,7 +1,7 @@
 package game;
 
 import entities.Player;
-import entityManager.BulletManager;
+import entityManager.AmmoManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -10,14 +10,14 @@ public class KeyInput implements KeyListener {
     public static boolean leftPressed, rightPressed, spacePressed;
     private GamePanel gamePanel;
     private Game game;
-    private BulletManager bulletManager ;
+    private AmmoManager ammoManager;
     private Player player;
 
     public KeyInput(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         this.game = gamePanel.getGame();
         this.player = game.getPlayer();
-        this.bulletManager = game.getBulletManager();
+        this.ammoManager = game.getBulletManager();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class KeyInput implements KeyListener {
                 break;
             case KeyEvent.VK_SPACE:
                 spacePressed = true;
-                bulletManager.addPlayerBullet(player.getX() + (float) player.getWidth() / 2, player.getY() - 20);
+                ammoManager.addPlayerBullet(player.getX() + (float) player.getWidth() / 2, player.getY() - 20);
                 break;
         }
     }

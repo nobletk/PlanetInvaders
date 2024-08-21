@@ -1,9 +1,11 @@
 package physics;
 
-import entities.Bullet;
 import entities.Bunker;
 import entities.Entity;
 import entities.Player;
+import entities.ammo.Ammo;
+import entities.ammo.Bomb;
+import entities.ammo.Bullet;
 import entities.enemy.Enemy;
 import entityManager.BunkerManager;
 import entityManager.EnemyManager;
@@ -25,11 +27,11 @@ public class Collision {
         this.player = game.getPlayer();
     }
 
-    public boolean checkBunkerCollision(Bullet bul) {
+    public boolean checkBunkerCollision(Ammo ammo) {
         List<Bunker> bunkers = bunkerManager.getBunkers();
         for (int i = 0; i < bunkers.size(); i++) {
             Bunker bun = bunkers.get(i);
-            if (checkCollisionWithEntity(bul, bun)) {
+            if (checkCollisionWithEntity(ammo, bun)) {
                 System.out.printf("Collided Bunker[%d]\n", i);
                 return true;
             }
@@ -52,7 +54,7 @@ public class Collision {
         return false;
     }
 
-    public boolean checkPlayerCollision(Bullet b) {
+    public boolean checkPlayerCollision(Bomb b) {
         if (checkCollisionWithEntity(b, player)) {
             System.out.println("Collided with player");
             return true;
@@ -60,12 +62,12 @@ public class Collision {
         return false;
     }
 
-    private boolean checkCollisionWithEntity(Bullet b, Entity e) {
+    private boolean checkCollisionWithEntity(Ammo a, Entity e) {
         for (int row = 0; row < e.getGridHeight(); row++) {
             for (int col = 0; col < e.getGridWidth(); col++) {
-                if (isBlockCollidable(e, row, col) && isBulletCollidingWithBlock(b, e, row, col)) {
+                if (isBlockCollidable(e, row, col) && isAmmoCollidingWithBlock(a, e, row, col)) {
                     if (e instanceof Bunker) {
-                        ((Bunker) e).updateBlock(row, col);
+                        ((Bunker) e).destroyBlocks(row, col);
                     }
                     return true;
                 }
@@ -78,11 +80,12 @@ public class Collision {
         return e.getBlockValue(row, col) == 1;
     }
 
-    private boolean isBulletCollidingWithBlock(Bullet b, Entity e, int row, int col) {
-        float x = e.getX() + col * e.getBlockSize();
-        float y = e.getY() + row * e.getBlockSize();
-        Rectangle blockBounds = e.getBounds(x, y, e.getBlockSize(), e.getBlockSize());
-        return blockBounds.intersects(b.getBounds(b.getX(), b.getY(), b.getBlockSize(), b.getBlockSize()));
+    private boolean isAmmoCollidingWithBlock(Ammo a, Entity e, int row, int col) {
+        float x = e.getX() + col * e.getBlockWidth();
+        float y = e.getY() + row * e.getBlockHeight();
+        Rectangle entityBounds = e.getBounds(x, y, e.getBlockWidth(), e.getBlockHeight());
+        Rectangle ammoBounds = a.getBounds(a.getX(), a.getY(), a.getBlockWidth(), a.getBlockHeight());
+        return entityBounds.intersects(ammoBounds);
     }
 
 }

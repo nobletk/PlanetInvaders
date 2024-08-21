@@ -1,7 +1,7 @@
 package game;
 
 import entities.Player;
-import entityManager.BulletManager;
+import entityManager.AmmoManager;
 import entityManager.BunkerManager;
 import entityManager.EnemyManager;
 import entityManager.TaskManager;
@@ -12,7 +12,7 @@ public class Game implements Runnable {
     private GameWindow gameWindow;
     private GamePanel gamePanel;
     private Player player;
-    private BulletManager bulletManager;
+    private AmmoManager ammoManager;
     private EnemyManager enemyManager;
     private BunkerManager bunkerManager;
     private TaskManager taskManager;
@@ -75,7 +75,7 @@ public class Game implements Runnable {
 
     public void update() {
         player.update();
-        bulletManager.update();
+        ammoManager.update();
         enemyManager.update();
         bunkerManager.update();
         taskManager.update();
@@ -84,7 +84,7 @@ public class Game implements Runnable {
 
     public void render(Graphics g) {
         player.render(g);
-        bulletManager.render(g);
+        ammoManager.render(g);
         enemyManager.render(g);
         bunkerManager.render(g);
         score.render(g);
@@ -95,7 +95,7 @@ public class Game implements Runnable {
         player = new Player(450, 900);
         bunkerManager = new BunkerManager(70, 820, this);
         enemyManager = new EnemyManager(50, 200, this);
-        bulletManager = new BulletManager(this);
+        ammoManager = new AmmoManager(this);
         taskManager = new TaskManager(this);
     }
 
@@ -103,8 +103,8 @@ public class Game implements Runnable {
         return player;
     }
 
-    public BulletManager getBulletManager() {
-        return bulletManager;
+    public AmmoManager getBulletManager() {
+        return ammoManager;
     }
 
     public BunkerManager getBunkerManager() {

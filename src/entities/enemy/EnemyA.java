@@ -16,9 +16,6 @@ public class EnemyA extends Entity implements Enemy {
         this.velX = velX;
         this.velY = velY;
         this.incVelX = incVelX;
-        this.gridWidth = 13;
-        this.gridHeight = 12;
-        this.blockSize = 3;
         this.pts = 10;
         this.dead = false;
         this.isMoving = true;
@@ -62,15 +59,15 @@ public class EnemyA extends Entity implements Enemy {
     public void render(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
 
-        for (int i = 0; i < gridHeight; i++) {
-            for (int j = 0; j < gridWidth; j++) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
                 if (grid[i][j] == 1) {
-                    float xFill = x + j * blockSize;
-                    float yFill = y + i * blockSize;
+                    float xFill = x + j * getBlockWidth();
+                    float yFill = y + i * getBlockHeight();
                     g.setColor(Color.RED);
-                    g.fillRect((int) xFill, (int) yFill, blockSize, blockSize);
+                    g.fillRect((int) xFill, (int) yFill, getBlockWidth(), getBlockHeight());
                     g2D.setColor(Color.black);
-                    g2D.draw(getBounds(xFill, yFill, blockSize, blockSize));
+                    g2D.draw(getBounds(xFill, yFill, getBlockWidth(), getBlockHeight()));
                 }
             }
         }
@@ -138,11 +135,6 @@ public class EnemyA extends Entity implements Enemy {
         int rectangleHeight = h;
 
         return new Rectangle(rectangleX, rectangleY, rectangleWidth, rectangleHeight);
-    }
-
-    public void setPosition(float x, float y) {
-        this.x = x;
-        this.y = y;
     }
 
     @Override

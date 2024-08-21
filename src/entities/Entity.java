@@ -6,12 +6,13 @@ public abstract class Entity {
 
     protected int[][] grid;
     protected float x, y;
-    protected int gridWidth, gridHeight, blockSize;
+    protected int blockWidth, blockHeight;
 
     public Entity(float x, float y) {
         this.x = x;
         this.y = y;
-        this.grid = new int[][]{};
+        this.blockHeight = 4;
+        this.blockWidth = 3;
     }
 
     public void render(Graphics g) {}
@@ -23,7 +24,7 @@ public abstract class Entity {
     }
 
     public int[][] getGrid() {
-       return grid;
+        return grid;
     }
 
     public float getX() {
@@ -35,23 +36,27 @@ public abstract class Entity {
     }
 
     public int getWidth() {
-        return gridWidth * blockSize;
+        return grid[0].length * blockWidth;
     }
 
     public int getHeight() {
-        return gridHeight * blockSize;
+        return grid.length * blockHeight;
     }
 
     public int getGridHeight() {
-        return gridHeight;
+        return grid.length;
     }
 
     public int getGridWidth() {
-        return gridWidth;
+        return grid[0].length;
     }
 
-    public int getBlockSize() {
-        return blockSize;
+    public int getBlockWidth() {
+        return blockWidth;
+    }
+
+    public int getBlockHeight() {
+        return blockHeight;
     }
 
     public int getBlockValue(int i, int j) {
