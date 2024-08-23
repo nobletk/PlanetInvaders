@@ -2,7 +2,6 @@ package entities.enemy;
 
 import java.awt.*;
 
-//TODO: clean up enemy classes using this interface by implementing default methods
 public interface Enemy {
 
     float getX();
@@ -43,15 +42,17 @@ public interface Enemy {
 
     boolean isDead();
 
-    void setDead(boolean b);
+    void setDead(boolean dead);
 
     float getVelX();
 
-    void setVelX(float i);
+    void setVelX(float velX);
 
     float getIncVelX();
 
-    void setIncVelX(float i);
+    void setIncVelX(float incVelX);
+
+    void sideMovement();
 
     void moveDownward();
 

@@ -1,14 +1,13 @@
 package entityManager;
 
-import entities.enemy.Enemy;
-import entities.enemy.EnemyA;
-import entities.enemy.EnemyB;
-import entities.enemy.EnemyC;
+import entities.enemy.*;
 import game.Game;
 import game.GamePanel;
 import game.GameScore;
+import game.SoundPlayer;
 
 import java.awt.*;
+import java.util.Random;
 
 public class EnemyManager {
     protected static int enemyRows = 5;
@@ -17,14 +16,23 @@ public class EnemyManager {
     private GameScore score;
     private int[][] enemyGrid;
     private Enemy[][] enemies = new Enemy[enemyRows][enemyCols];
+    private EnemyD ufo;
+    private boolean ufoActive;
+    private int ufoCooldown;
+    private Random random;
     private float velX, velY, incVelX;
+    private int delayMoveSound;
+    private SoundPlayer moveSound;
 
     public EnemyManager(float x, float y, Game game) {
         this.game = game;
         this.score = game.getScore();
-        this.velX = 0.5f;
-        this.velY = 5f;
+        this.velX = 0.2f;
+        this.velY = 10f;
         this.incVelX = 0.03f;
+        this.delayMoveSound = 700;
+        this.random = new Random();
+        this.ufoCooldown = random.nextInt(1000) + 3000;
 
         enemyGrid = new int[][]{
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -51,6 +59,12 @@ public class EnemyManager {
                 }
             }
         }
+
+        moveSound = new SoundPlayer("src/assets/sound/invadermove.wav");
+        moveSound.setVolume(-10.0f);
+        moveSound.setLoop(true);
+        moveSound.setDelay(delayMoveSound);
+        moveSound.play();
     }
 
     public void render(Graphics g) {
@@ -62,9 +76,14 @@ public class EnemyManager {
                 }
             }
         }
+
+        if (ufoActive && ufo != null) {
+            ufo.render(g);
+        }
     }
 
     public void update() {
+        handleUFO();
         updateDeadEnemies();
         updateEnemyMovement();
     }
@@ -75,6 +94,9 @@ public class EnemyManager {
                 Enemy e = enemies[i][j];
                 if (e != null && e.isDead()) {
                     e.destroy();
+                    SoundPlayer sound = new SoundPlayer("src/assets/sound/invaderkilled.wav");
+                    sound.setVolume(-10.0f);
+                    sound.play();
                     score.addPoints(e.getPoints());
                     enemies[i][j] = null;
                 }
@@ -103,13 +125,16 @@ public class EnemyManager {
     }
 
     private void changeEnemyDir() {
+        delayMoveSound -= 1;
+        moveSound.setDelay(delayMoveSound);
+
         for (int i = 0; i < enemies.length; i++) {
             for (int j = 0; j < enemies[i].length; j++) {
                 Enemy e = enemies[i][j];
                 if (e != null) {
                     //TODO: gameOver when hitting bunkers
                     e.setIncVelX(-e.getIncVelX());
-                    e.setVelX(-e.getVelX() + e.getIncVelX()); //-10-5; 10+5
+                    e.setVelX(-e.getVelX() + e.getIncVelX());
                     e.moveDownward();
                     e.update();
                 }
@@ -117,8 +142,31 @@ public class EnemyManager {
         }
     }
 
+    private void handleUFO() {
+        if (!ufoActive) {
+            ufoCooldown--;
+            if (ufoCooldown <= 0) {
+                ufo = new EnemyD(900, 80, -0.4f);
+                ufoActive = true;
+                ufoCooldown = random.nextInt(1000) + 3000;
+            }
+        } else {
+            ufo.update();
+            if (ufo.getX() <= 0 || ufo.isDead()) {
+                if (ufo.isDead()) score.addPoints(ufo.getPoints());
+                ufo.update();
+                ufoActive = false;
+                ufo = null;
+            }
+        }
+    }
+
     public Enemy[][] getEnemies() {
         return enemies;
+    }
+
+    public EnemyD getUFO() {
+        return ufo;
     }
 }
 

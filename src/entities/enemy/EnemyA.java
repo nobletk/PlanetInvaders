@@ -47,7 +47,7 @@ public class EnemyA extends Entity implements Enemy {
                 {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
                 {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
                 {0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0},
-                {0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, //legs
                 {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
                 {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
                 {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -57,8 +57,6 @@ public class EnemyA extends Entity implements Enemy {
 
     @Override
     public void render(Graphics g) {
-        Graphics2D g2D = (Graphics2D) g;
-
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 if (grid[i][j] == 1) {
@@ -66,18 +64,11 @@ public class EnemyA extends Entity implements Enemy {
                     float yFill = y + i * getBlockHeight();
                     g.setColor(Color.RED);
                     g.fillRect((int) xFill, (int) yFill, getBlockWidth(), getBlockHeight());
-                    g2D.setColor(Color.black);
-                    g2D.draw(getBounds(xFill, yFill, getBlockWidth(), getBlockHeight()));
                 }
             }
         }
     }
 
-    //TODO: The aliens should move left to right across the screen,
-    // stepping down every time they touch the edge of the screen.
-    // They should also move a little faster each time they step down the screen.
-    // The aliens should drop a bomb that moves down the screen towards the bottom occasionally.
-    // Create 2 loops to populate it with different enemy types.
     @Override
     public void update() {
         if (animationCooldown > 0) animationCooldown--;
@@ -85,6 +76,7 @@ public class EnemyA extends Entity implements Enemy {
         animate();
     }
 
+    @Override
     public void sideMovement() {
         x += velX;
     }
@@ -97,7 +89,7 @@ public class EnemyA extends Entity implements Enemy {
                 this.grid = original;
             }
             isMoving = !isMoving;
-            animationCooldown = 150;
+            animationCooldown = 175;
         }
     }
 
@@ -107,8 +99,8 @@ public class EnemyA extends Entity implements Enemy {
     }
 
     @Override
-    public void setVelX(float i) {
-        velX = i;
+    public void setVelX(float velX) {
+        this.velX = velX;
     }
 
     @Override
@@ -117,8 +109,8 @@ public class EnemyA extends Entity implements Enemy {
     }
 
     @Override
-    public void setIncVelX(float i) {
-        incVelX = i;
+    public void setIncVelX(float incVelX) {
+        this.incVelX = incVelX;
     }
 
     @Override
@@ -127,24 +119,13 @@ public class EnemyA extends Entity implements Enemy {
     }
 
     @Override
-    public Rectangle getBounds(float x, float y, int w, int h) {
-        //TODO: add speed when movement is implemented
-        int rectangleX = (int) x;
-        int rectangleY = (int) y;
-        int rectangleWidth = w;
-        int rectangleHeight = h;
-
-        return new Rectangle(rectangleX, rectangleY, rectangleWidth, rectangleHeight);
-    }
-
-    @Override
     public boolean isDead() {
         return dead;
     }
 
     @Override
-    public void setDead(boolean b) {
-        dead = b;
+    public void setDead(boolean dead) {
+        this.dead = dead;
     }
 
     @Override

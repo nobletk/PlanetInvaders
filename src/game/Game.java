@@ -103,7 +103,7 @@ public class Game implements Runnable {
         return player;
     }
 
-    public AmmoManager getBulletManager() {
+    public AmmoManager getAmmoManager() {
         return ammoManager;
     }
 

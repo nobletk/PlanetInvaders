@@ -1,8 +1,8 @@
 package entityManager;
 
+import entities.Player;
 import entities.ammo.Bomb;
 import entities.ammo.Bullet;
-import entities.Player;
 import game.Game;
 import game.GamePanel;
 import game.GameScore;
@@ -55,6 +55,9 @@ public class AmmoManager {
                 removePlayerBullet(b);
             }
             if (collision.checkBunkerCollision(b)) {
+                removePlayerBullet(b);
+            }
+            if (collision.checkUFOCollision(b)) {
                 removePlayerBullet(b);
             }
             b.update();

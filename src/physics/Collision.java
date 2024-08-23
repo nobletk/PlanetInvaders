@@ -7,6 +7,7 @@ import entities.ammo.Ammo;
 import entities.ammo.Bomb;
 import entities.ammo.Bullet;
 import entities.enemy.Enemy;
+import entities.enemy.EnemyD;
 import entityManager.BunkerManager;
 import entityManager.EnemyManager;
 import game.Game;
@@ -32,7 +33,6 @@ public class Collision {
         for (int i = 0; i < bunkers.size(); i++) {
             Bunker bun = bunkers.get(i);
             if (checkCollisionWithEntity(ammo, bun)) {
-                System.out.printf("Collided Bunker[%d]\n", i);
                 return true;
             }
         }
@@ -45,11 +45,19 @@ public class Collision {
             for (int j = 0; j < enemies[i].length; j++) {
                 Enemy e = enemies[i][j];
                 if (e != null && checkCollisionWithEntity(b, (Entity) e)) {
-                    System.out.printf("Collided Entity[%d][%d]\n", i, j);
                     e.setDead(true);
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    public boolean checkUFOCollision(Bullet b) {
+        EnemyD ufo = enemyManager.getUFO();
+        if (ufo != null && checkCollisionWithEntity(b, ufo)) {
+            ufo.setDead(true);
+            return true;
         }
         return false;
     }

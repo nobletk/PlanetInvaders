@@ -17,7 +17,7 @@ public class KeyInput implements KeyListener {
         this.gamePanel = gamePanel;
         this.game = gamePanel.getGame();
         this.player = game.getPlayer();
-        this.ammoManager = game.getBulletManager();
+        this.ammoManager = game.getAmmoManager();
     }
 
     @Override

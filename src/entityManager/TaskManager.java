@@ -11,7 +11,7 @@ public class TaskManager {
 
     public TaskManager(Game game) {
         this.game = game;
-        this.ammoManager = game.getBulletManager();
+        this.ammoManager = game.getAmmoManager();
         this.enemies = game.getEnemyManager().getEnemies();
     }
 
