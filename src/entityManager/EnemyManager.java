@@ -1,7 +1,10 @@
 package entityManager;
 
 import entities.UFO;
-import entities.enemy.*;
+import entities.enemy.Enemy;
+import entities.enemy.EnemyA;
+import entities.enemy.EnemyB;
+import entities.enemy.EnemyC;
 import game.Game;
 import game.GamePanel;
 import game.GameScore;
@@ -13,7 +16,6 @@ import java.util.Random;
 public class EnemyManager {
     protected static int enemyRows = 5;
     protected static int enemyCols = 10;
-    private Game game;
     private GameScore score;
     private int[][] enemyGrid;
     private Enemy[][] enemies = new Enemy[enemyRows][enemyCols];
@@ -26,7 +28,6 @@ public class EnemyManager {
     private SoundPlayer moveSound;
 
     public EnemyManager(float x, float y, Game game) {
-        this.game = game;
         this.score = game.getScore();
         this.velX = 0.2f;
         this.velY = 10f;
@@ -149,21 +150,52 @@ public class EnemyManager {
 
     private void handleUFO() {
         if (!ufoActive) {
+            handleUFOCooldown();
+        } else {
+            updateAndCheckUFO();
+        }
+    }
+
+    private void handleUFOCooldown() {
+        if (!ufoActive) {
             ufoCooldown--;
             if (ufoCooldown <= 0) {
-                ufo = new UFO(900, 80, -0.4f);
+                spawnUFO();
                 ufoActive = true;
                 ufoCooldown = random.nextInt(1000) + 3000;
             }
-        } else {
-            ufo.update();
-            if (ufo.getX() <= 0 || ufo.isDead()) {
-                if (ufo.isDead()) score.addPoints(ufo.getPoints());
-                ufo.update();
-                ufoActive = false;
-                ufo = null;
-            }
         }
+    }
+
+    //screenWidth = 900, height = 1024
+    private void spawnUFO() {
+        boolean leftToRight = leftToRightUFO();
+        float startX = leftToRight ? 0 : 900;
+        float velX = leftToRight ? 0.4f : -0.4f;
+        ufo = new UFO(startX, 80, velX);
+    }
+
+    private void updateAndCheckUFO() {
+        ufo.update();
+
+        if (hasUFOExitedScreen() || ufo.isDead()) handleUFODestruction();
+    }
+
+    private boolean hasUFOExitedScreen() {
+        return leftToRightUFO() ? ufo.getX() >= GamePanel.getScreenWidth() : ufo.getX() <= 0;
+    }
+
+    private void handleUFODestruction() {
+        if (ufo.isDead()) {
+            score.addPoints(ufo.getPoints());
+        }
+        ufo.stopSound();
+        ufoActive = false;
+        ufo = null;
+    }
+
+    private boolean leftToRightUFO() {
+        return random.nextBoolean();
     }
 
     public Enemy[][] getEnemies() {

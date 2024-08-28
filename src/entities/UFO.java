@@ -56,21 +56,10 @@ public class UFO extends Entity {
     @Override
     public void update() {
         sideMovement();
-        if (getX() <= 0 || isDead()) {
-            stopSound();
-        }
     }
 
     public void sideMovement() {
         x += velX;
-    }
-
-    public float getVelX() {
-        return velX;
-    }
-
-    public void setVelX(float velX) {
-        this.velX = velX;
     }
 
     public boolean isDead() {
@@ -87,7 +76,6 @@ public class UFO extends Entity {
 
     public void stopSound() {
         if (sound != null) {
-            System.out.println("stopping sound");
             sound.stop();
             sound = null;
         }

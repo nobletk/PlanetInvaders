@@ -4,13 +4,11 @@ import entities.enemy.Enemy;
 import game.Game;
 
 public class TaskManager {
-    private Game game;
     private AmmoManager ammoManager;
     private Enemy[][] enemies;
     private int enemyShotCooldown = 0;
 
     public TaskManager(Game game) {
-        this.game = game;
         this.ammoManager = game.getAmmoManager();
         this.enemies = game.getEnemyManager().getEnemies();
     }
@@ -31,7 +29,7 @@ public class TaskManager {
             if (row == EnemyManager.enemyRows - 1 || enemies[row + 1][col] == null) {
                 ammoManager.addEnemyBullet(e.getX() + ((float) e.getWidth() / 2), e.getY() + e.getHeight());
                 enemyShotCooldown = 500;
-                System.out.printf("shot %d %d\n", row, col);
+//                System.out.printf("shot %d %d\n", row, col);
             }
         }
     }
