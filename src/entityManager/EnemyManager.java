@@ -1,5 +1,6 @@
 package entityManager;
 
+import entities.UFO;
 import entities.enemy.*;
 import game.Game;
 import game.GamePanel;
@@ -16,7 +17,7 @@ public class EnemyManager {
     private GameScore score;
     private int[][] enemyGrid;
     private Enemy[][] enemies = new Enemy[enemyRows][enemyCols];
-    private EnemyD ufo;
+    private UFO ufo;
     private boolean ufoActive;
     private int ufoCooldown;
     private Random random;
@@ -93,12 +94,16 @@ public class EnemyManager {
             for (int j = 0; j < enemies[i].length; j++) {
                 Enemy e = enemies[i][j];
                 if (e != null && e.isDead()) {
-                    e.destroy();
-                    SoundPlayer sound = new SoundPlayer("src/assets/sound/invaderkilled.wav");
-                    sound.setVolume(-10.0f);
-                    sound.play();
-                    score.addPoints(e.getPoints());
-                    enemies[i][j] = null;
+                    if (!e.isExploding() && !e.isReadyForRemoval()) {
+                        e.destroy();
+                        SoundPlayer sound = new SoundPlayer("src/assets/sound/invaderkilled.wav");
+                        sound.setVolume(-10.0f);
+                        sound.play();
+                        score.addPoints(e.getPoints());
+                    }
+                    if (e.isReadyForRemoval()) {
+                        enemies[i][j] = null;
+                    }
                 }
             }
         }
@@ -146,7 +151,7 @@ public class EnemyManager {
         if (!ufoActive) {
             ufoCooldown--;
             if (ufoCooldown <= 0) {
-                ufo = new EnemyD(900, 80, -0.4f);
+                ufo = new UFO(900, 80, -0.4f);
                 ufoActive = true;
                 ufoCooldown = random.nextInt(1000) + 3000;
             }
@@ -165,7 +170,7 @@ public class EnemyManager {
         return enemies;
     }
 
-    public EnemyD getUFO() {
+    public UFO getUFO() {
         return ufo;
     }
 }

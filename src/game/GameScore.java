@@ -12,11 +12,14 @@ public class GameScore {
     private List<Player> livesList = new ArrayList<>();
     private int playerScore;
     private int numOfLives;
+    private final Color textColor, playerColor;
 
     public GameScore(Game game) {
         this.playerScore = 0;
         this.numOfLives = 2;
         this.itcMachineFont = FontLoader.loadFont("/assets/fonts/ITCMachineMedium.otf", 26f);
+        this.textColor = GameColors.TEXT.getColor();
+        this.playerColor = GameColors.PLAYER.getColor();
         initLives();
     }
 
@@ -25,17 +28,17 @@ public class GameScore {
         Graphics2D g2D = (Graphics2D) g;
 
         g2D.setFont(itcMachineFont);
-        g2D.setColor(Color.cyan);
+        g2D.setColor(textColor);
         g2D.drawString("SCORE<1>", 40, 40);
         g2D.drawString(getPaddedScore(), 40, 65);
 
 
-        g.setColor(Color.CYAN);
+        g.setColor(playerColor);
         for (int i = 0; i < numOfLives; i++) {
             Player p = livesList.get(i);
             p.render(g);
         }
-        g2D.setColor(Color.CYAN);
+        g2D.setColor(textColor);
         g2D.drawString(String.valueOf(numOfLives + 1), 40, 987);
         g2D.setStroke(new BasicStroke(3));
         g2D.drawLine(20, 950, 880, 950);

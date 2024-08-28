@@ -72,7 +72,7 @@ public class SoundPlayer implements Runnable {
     }
 
     public void stop() {
-       playing = false;
-       loop = false;
+        playing = false;
+        loop = false;
     }
 }

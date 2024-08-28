@@ -7,7 +7,7 @@ import entities.ammo.Ammo;
 import entities.ammo.Bomb;
 import entities.ammo.Bullet;
 import entities.enemy.Enemy;
-import entities.enemy.EnemyD;
+import entities.UFO;
 import entityManager.BunkerManager;
 import entityManager.EnemyManager;
 import game.Game;
@@ -54,7 +54,7 @@ public class Collision {
     }
 
     public boolean checkUFOCollision(Bullet b) {
-        EnemyD ufo = enemyManager.getUFO();
+        UFO ufo = enemyManager.getUFO();
         if (ufo != null && checkCollisionWithEntity(b, ufo)) {
             ufo.setDead(true);
             return true;
@@ -95,5 +95,4 @@ public class Collision {
         Rectangle ammoBounds = a.getBounds(a.getX(), a.getY(), a.getBlockWidth(), a.getBlockHeight());
         return entityBounds.intersects(ammoBounds);
     }
-
 }

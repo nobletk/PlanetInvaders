@@ -1,10 +1,15 @@
 package entities;
 
+import game.GameColors;
+
 import java.awt.*;
 
 public class Bunker extends Entity {
+    private final Color color;
+
     public Bunker(float x, float y) {
         super(x, y);
+        this.color = GameColors.BUNKER.getColor();
 
         this.grid = new int[][]{
                 {0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0},
@@ -30,7 +35,7 @@ public class Bunker extends Entity {
                 if (grid[i][j] == 1) {
                     float xFill = x + j * getBlockWidth();
                     float yFill = y + i * getBlockHeight();
-                    g.setColor(Color.CYAN);
+                    g.setColor(color);
                     g.fillRect((int) xFill, (int) yFill, getBlockWidth(), getBlockHeight());
                 }
             }

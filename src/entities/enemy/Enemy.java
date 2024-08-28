@@ -30,15 +30,15 @@ public interface Enemy {
 
     void update();
 
-    default void destroy() {
-        for (int i = 0; i < getGridHeight(); i++) {
-            for (int j = 0; j < getGridWidth(); j++) {
-                if (getGrid()[i][j] == 1) {
-                    getGrid()[i][j] = 0;
-                }
-            }
-        }
-    }
+    void animate();
+
+    void destroy();
+
+    void explode(Graphics g);
+
+    boolean isExploding();
+
+    boolean isReadyForRemoval();
 
     boolean isDead();
 

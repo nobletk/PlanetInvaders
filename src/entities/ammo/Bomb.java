@@ -1,15 +1,18 @@
 package entities.ammo;
 
 import entities.Entity;
+import game.GameColors;
 
 import java.awt.*;
 
 public class Bomb extends Entity implements Ammo {
+    private final Color color;
     private float velY;
 
     public Bomb(float x, float y, float velY) {
         super(x, y);
         this.velY = velY;
+        this.color = GameColors.ENEMY.getColor();
 
         this.grid = new int[][]{
                 {0, 0, 1},
@@ -24,17 +27,13 @@ public class Bomb extends Entity implements Ammo {
 
     @Override
     public void render(Graphics g) {
-        Graphics2D g2D = (Graphics2D) g;
-
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 if (grid[i][j] == 1) {
                     float xFill = x + j * getBlockWidth();
                     float yFill = y + i * getBlockHeight();
-                    g.setColor(Color.cyan);
+                    g.setColor(color);
                     g.fillRect((int) xFill, (int) yFill, getBlockWidth(), getBlockHeight());
-                    g2D.setColor(Color.red);
-                    g2D.draw(getBounds(x, y, getBlockWidth(), getBlockHeight()));
                 }
             }
         }

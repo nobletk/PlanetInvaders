@@ -1,6 +1,6 @@
-package entities.enemy;
+package entities;
 
-import entities.Entity;
+import game.GameColors;
 import game.SoundPlayer;
 
 import java.awt.*;
@@ -8,15 +8,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class EnemyD extends Entity implements Enemy {
+public class UFO extends Entity {
+    private final Color color;
+    private final int pts;
     private float velX;
-    private int pts;
     private boolean dead;
     private SoundPlayer sound;
 
-    public EnemyD(float x, float y, float velX) {
+    public UFO(float x, float y, float velX) {
         super(x, y);
         this.velX = velX;
+        this.color = GameColors.UFO.getColor();
         this.dead = false;
         this.pts = mysteryPts();
 
@@ -44,7 +46,7 @@ public class EnemyD extends Entity implements Enemy {
                 if (grid[i][j] == 1) {
                     float xFill = x + j * getBlockWidth();
                     float yFill = y + i * getBlockHeight();
-                    g.setColor(Color.RED);
+                    g.setColor(color);
                     g.fillRect((int) xFill, (int) yFill, getBlockWidth(), getBlockHeight());
                 }
             }
@@ -59,47 +61,28 @@ public class EnemyD extends Entity implements Enemy {
         }
     }
 
-    @Override
     public void sideMovement() {
         x += velX;
     }
 
-    @Override
     public float getVelX() {
         return velX;
     }
 
-    @Override
     public void setVelX(float velX) {
         this.velX = velX;
     }
 
-    @Override
-    public float getIncVelX() {
-        return 0;
-    }
-
-    @Override
-    public void setIncVelX(float incVelX) {
-    }
-
-    @Override
     public boolean isDead() {
         return dead;
     }
 
-    @Override
     public void setDead(boolean dead) {
         this.dead = dead;
     }
 
-    @Override
     public int getPoints() {
         return pts;
-    }
-
-    @Override
-    public void moveDownward() {
     }
 
     public void stopSound() {

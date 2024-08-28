@@ -1,17 +1,20 @@
 package entities.ammo;
 
 import entities.Entity;
+import game.GameColors;
 import game.SoundPlayer;
 
 import java.awt.*;
 
 public class Bullet extends Entity implements Ammo {
+    private final Color color;
     private float velY;
     private SoundPlayer sound;
 
     public Bullet(float x, float y, float velY) {
         super(x, y);
         this.velY = velY;
+        this.color = GameColors.PLAYER.getColor();
 
         this.sound = new SoundPlayer("src/assets/sound/shoot.wav");
         sound.setVolume(-10.0f);
@@ -31,7 +34,7 @@ public class Bullet extends Entity implements Ammo {
             for (int j = 0; j < grid[i].length; j++) {
                 float xFill = x + j * getBlockWidth();
                 float yFill = y + i * getBlockHeight();
-                g.setColor(Color.CYAN);
+                g.setColor(color);
                 g.fillOval((int) xFill, (int) yFill, getBlockWidth(), getBlockHeight());
             }
         }
