@@ -37,12 +37,12 @@ public class Player extends Entity {
 
     @Override
     public void render(Graphics g) {
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == 1) {
-                    float xFill = x + j * getBlockWidth();
-                    float yFill = y + i * getBlockHeight();
-                    if (visible) {
+        if (visible) {
+            for (int i = 0; i < grid.length; i++) {
+                for (int j = 0; j < grid[i].length; j++) {
+                    if (grid[i][j] == 1) {
+                        float xFill = x + j * getBlockWidth();
+                        float yFill = y + i * getBlockHeight();
                         g.setColor(color);
                         g.fillRect((int) xFill, (int) yFill, getBlockWidth(), getBlockHeight());
                     }

@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameScore {
+    private final Color textColor, playerColor;
     private Font itcMachineFont;
     private List<Player> livesList = new ArrayList<>();
     private int playerScore;
     private int numOfLives;
-    private final Color textColor, playerColor;
 
     public GameScore(Game game) {
         this.playerScore = 0;
-        this.numOfLives = 2;
+        this.numOfLives = 3;
         this.itcMachineFont = FontLoader.loadFont("/assets/fonts/ITCMachineMedium.otf", 26f);
         this.textColor = GameColors.TEXT.getColor();
         this.playerColor = GameColors.PLAYER.getColor();
@@ -39,7 +39,7 @@ public class GameScore {
             p.render(g);
         }
         g2D.setColor(textColor);
-        g2D.drawString(String.valueOf(numOfLives + 1), 40, 987);
+        g2D.drawString(String.valueOf(numOfLives), 40, 987);
         g2D.setStroke(new BasicStroke(3));
         g2D.drawLine(20, 950, 880, 950);
     }
@@ -48,7 +48,7 @@ public class GameScore {
     }
 
     private void initLives() {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < numOfLives; i++) {
             Player p = new Player(0, 0);
             float x = 70 + i * (p.getWidth() + 15);
             float y = 960;

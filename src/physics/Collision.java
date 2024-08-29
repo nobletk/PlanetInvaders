@@ -62,7 +62,6 @@ public class Collision {
 
     public boolean checkPlayerCollision(Bomb b) {
         if (checkCollisionWithEntity(b, player)) {
-            System.out.println("Collided with player");
             return true;
         }
         return false;
