@@ -3,15 +3,24 @@ package entities;
 import game.GameColors;
 import game.GamePanel;
 import game.KeyInput;
+import game.SoundPlayer;
 
 import java.awt.*;
 
 public class Player extends Entity {
-    private static float playerSpeed = 1;
     private final Color color;
+    private float playerSpeed, respawnX, respawnY;
+    private int blinkFreq, respawnDuration, respawnTimer;
+    private boolean respawning, visible;
 
     public Player(float x, float y) {
         super(x, y);
+        this.respawnX = x;
+        this.respawnY = y;
+        this.playerSpeed = 1.0f;
+        this.blinkFreq = 10;
+        this.respawning = false;
+        this.visible = true;
         this.color = GameColors.PLAYER.getColor();
 
         this.grid = new int[][]{
@@ -33,8 +42,10 @@ public class Player extends Entity {
                 if (grid[i][j] == 1) {
                     float xFill = x + j * getBlockWidth();
                     float yFill = y + i * getBlockHeight();
-                    g.setColor(color);
-                    g.fillRect((int) xFill, (int) yFill, getBlockWidth(), getBlockHeight());
+                    if (visible) {
+                        g.setColor(color);
+                        g.fillRect((int) xFill, (int) yFill, getBlockWidth(), getBlockHeight());
+                    }
                 }
             }
         }
@@ -42,7 +53,28 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        move();
+        if (!respawning) move();
+        updateRespawn();
+    }
+
+    public void respawn() {
+        this.x = respawnX;
+        this.y = respawnY;
+        this.respawnDuration = 120;
+        this.respawnTimer = 0;
+        this.respawning = true;
+        this.visible = true;
+    }
+
+    private void updateRespawn() {
+        if (respawning) {
+            respawnTimer++;
+            if (respawnTimer % blinkFreq == 0) visible = !visible;
+            if (respawnTimer >= respawnDuration) {
+                respawning = false;
+                visible = true;
+            }
+        }
     }
 
     private void move() {
@@ -58,5 +90,15 @@ public class Player extends Entity {
                 x = GamePanel.getScreenWidth() - getWidth();
             }
         }
+    }
+
+    public void playExplosion() {
+        SoundPlayer sound = new SoundPlayer("src/assets/sound/playerExplosion.wav");
+        sound.setVolume(-10.0f);
+        sound.play();
+    }
+
+    public boolean isRespawning() {
+        return respawning;
     }
 }

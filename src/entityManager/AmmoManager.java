@@ -73,10 +73,13 @@ public class AmmoManager {
             if (collision.checkBunkerCollision(b)) {
                 removeEnemyBullet(b);
             }
-            if (collision.checkPlayerCollision(b)) {
-                //TODO: reanimate the player on using a life
-                score.removeLife();
-                removeEnemyBullet(b);
+            if (collision.checkPlayerCollision(b) && !player.isRespawning()) {
+                if (score.getNumOfLives() > 0) {
+                    player.playExplosion();
+                    score.removeLife();
+                    player.respawn();
+                    removeEnemyBullet(b);
+                }
             }
             b.update();
         }

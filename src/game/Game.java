@@ -92,7 +92,7 @@ public class Game implements Runnable {
 
     private void init() {
         score = new GameScore(this);
-        player = new Player(450, 900);
+        player = new Player(400, 900);
         bunkerManager = new BunkerManager(70, 820, this);
         enemyManager = new EnemyManager(50, 200, this);
         ammoManager = new AmmoManager(this);

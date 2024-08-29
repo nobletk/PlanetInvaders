@@ -16,13 +16,11 @@ import java.awt.*;
 import java.util.List;
 
 public class Collision {
-    private Game game;
     private EnemyManager enemyManager;
     private BunkerManager bunkerManager;
     private Player player;
 
     public Collision(Game game) {
-        this.game = game;
         this.enemyManager = game.getEnemyManager();
         this.bunkerManager = game.getBunkerManager();
         this.player = game.getPlayer();

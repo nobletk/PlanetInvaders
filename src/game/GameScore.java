@@ -64,6 +64,14 @@ public class GameScore {
         numOfLives--;
     }
 
+    public void addLife() {
+        numOfLives++;
+    }
+
+    public int getNumOfLives() {
+        return numOfLives;
+    }
+
     private String getPaddedScore() {
         return String.format("%04d", playerScore);
     }
