@@ -2,7 +2,7 @@
 
 ## Overview
 
-This an emulation of Space Invaders.
+This is an emulation of Space Invaders.
 
 ## Features
 

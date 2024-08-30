@@ -22,11 +22,6 @@ public class UFO extends Entity {
         this.dead = false;
         this.pts = mysteryPts();
 
-        sound = new SoundPlayer("src/assets/sound/ufo.wav");
-        sound.setLoop(true);
-        sound.setDelay(300);
-        sound.setVolume(-10.f);
-        sound.play();
 
         this.grid = new int[][]{
                 {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0},
@@ -72,6 +67,14 @@ public class UFO extends Entity {
 
     public int getPoints() {
         return pts;
+    }
+
+    public void playSound() {
+        sound = new SoundPlayer("src/assets/sound/ufo.wav");
+        sound.setLoop(true);
+        sound.setDelay(300);
+        sound.setVolume(-10.f);
+        sound.play();
     }
 
     public void stopSound() {

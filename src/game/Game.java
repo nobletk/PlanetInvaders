@@ -17,16 +17,20 @@ public class Game implements Runnable {
     private BunkerManager bunkerManager;
     private TaskManager taskManager;
     private GameScore score;
+    private GameMenu gameMenu;
+    private boolean running;
 
     public Game() {
         init();
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocusInWindow();
+        gameMenu = new GameMenu();
         startGameThread();
     }
 
     public void startGameThread() {
+        running = true;
         Thread gameThread = new Thread(this);
         gameThread.start();
     }
@@ -45,7 +49,7 @@ public class Game implements Runnable {
         double deltaU = 0;
         double deltaF = 0;
 
-        while (true) {
+        while (running) {
             long currentTime = System.nanoTime();
 
             deltaU += (currentTime - previousTime) / timePerUpdate;
@@ -74,20 +78,35 @@ public class Game implements Runnable {
     }
 
     public void update() {
-        player.update();
-        ammoManager.update();
-        enemyManager.update();
-        bunkerManager.update();
-        taskManager.update();
-        score.update();
+        switch (GameState.state) {
+            case MENU:
+                gameMenu.update();
+                break;
+            case RUNNING:
+                player.update();
+                ammoManager.update();
+                enemyManager.update();
+                bunkerManager.update();
+                taskManager.update();
+                score.update();
+                break;
+        }
     }
 
     public void render(Graphics g) {
-        player.render(g);
-        ammoManager.render(g);
-        enemyManager.render(g);
-        bunkerManager.render(g);
-        score.render(g);
+        switch (GameState.state) {
+            case MENU:
+                gameMenu.render(g);
+                break;
+            case RUNNING:
+                player.render(g);
+                ammoManager.render(g);
+                enemyManager.render(g);
+                bunkerManager.render(g);
+                score.render(g);
+                break;
+        }
+
     }
 
     private void init() {

@@ -7,10 +7,11 @@ public class GamePanel extends JPanel {
     private static final int screenWidth = 900;
     private static final int screenHeight = 1024;
     private Game game;
+    private KeyInput keyInput;
 
     public GamePanel(Game game) {
         this.game = game;
-        KeyInput keyInput = new KeyInput(this);
+        keyInput = new KeyInput(this);
         this.addKeyListener(keyInput);
         this.setFocusable(true);
         this.requestFocusInWindow();

@@ -15,9 +15,11 @@ public abstract class Entity {
         this.blockWidth = 3;
     }
 
-    public void render(Graphics g) {}
+    public void render(Graphics g) {
+    }
 
-    public void update() {}
+    public void update() {
+    }
 
     public Rectangle getBounds(float x, float y, int w, int h) {
         return new Rectangle((int) x, (int) y, w, h);
@@ -61,5 +63,10 @@ public abstract class Entity {
 
     public int getBlockValue(int i, int j) {
         return grid[i][j];
+    }
+
+    public void setPosition(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 }

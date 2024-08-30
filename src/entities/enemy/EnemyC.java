@@ -18,7 +18,7 @@ public class EnemyC extends Entity implements Enemy {
         this.velX = velX;
         this.velY = velY;
         this.incVelX = incVelX;
-        this.pts = 40;
+        this.pts = 10;
         this.dead = false;
         this.isMoving = true;
         this.exploding = false;

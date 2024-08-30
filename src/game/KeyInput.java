@@ -7,14 +7,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyInput implements KeyListener {
-    public static boolean leftPressed, rightPressed, spacePressed;
-    private GamePanel gamePanel;
+    public static boolean leftPressed, rightPressed, spacePressed, enterPressed;
     private Game game;
     private AmmoManager ammoManager;
     private Player player;
 
     public KeyInput(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
         this.game = gamePanel.getGame();
         this.player = game.getPlayer();
         this.ammoManager = game.getAmmoManager();
@@ -28,14 +26,27 @@ public class KeyInput implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_X:
-                leftPressed = true;
+                if (GameState.state == GameState.RUNNING) {
+                    leftPressed = true;
+                }
                 break;
             case KeyEvent.VK_V:
-                rightPressed = true;
+                if (GameState.state == GameState.RUNNING) {
+                    rightPressed = true;
+                }
                 break;
             case KeyEvent.VK_SPACE:
-                spacePressed = true;
-                ammoManager.addPlayerBullet(player.getX() + (float) player.getWidth() / 2, player.getY() - 20);
+                if (GameState.state == GameState.RUNNING) {
+                    spacePressed = true;
+                    ammoManager.addPlayerBullet(player.getX() + (float) player.getWidth() / 2, player.getY() - 20);
+                }
+                break;
+            case KeyEvent.VK_ENTER:
+                if (GameState.state == GameState.MENU) {
+                    enterPressed = true;
+                    System.out.println("enter pressed");
+                    GameState.state = GameState.RUNNING;
+                }
                 break;
         }
     }
@@ -51,6 +62,9 @@ public class KeyInput implements KeyListener {
                 break;
             case KeyEvent.VK_SPACE:
                 spacePressed = false;
+                break;
+            case KeyEvent.VK_ENTER:
+                enterPressed = false;
                 break;
         }
     }

@@ -5,10 +5,7 @@ import entities.enemy.Enemy;
 import entities.enemy.EnemyA;
 import entities.enemy.EnemyB;
 import entities.enemy.EnemyC;
-import game.Game;
-import game.GamePanel;
-import game.GameScore;
-import game.SoundPlayer;
+import game.*;
 
 import java.awt.*;
 import java.util.Random;
@@ -61,12 +58,6 @@ public class EnemyManager {
                 }
             }
         }
-
-        moveSound = new SoundPlayer("src/assets/sound/invadermove.wav");
-        moveSound.setVolume(-10.0f);
-        moveSound.setLoop(true);
-        moveSound.setDelay(delayMoveSound);
-        moveSound.play();
     }
 
     public void render(Graphics g) {
@@ -85,6 +76,7 @@ public class EnemyManager {
     }
 
     public void update() {
+        if (GameState.state == GameState.RUNNING && moveSound == null) playMoveSound();
         handleUFO();
         updateDeadEnemies();
         updateEnemyMovement();
@@ -132,7 +124,7 @@ public class EnemyManager {
 
     private void changeEnemyDir() {
         delayMoveSound -= 1;
-        moveSound.setDelay(delayMoveSound);
+        if (moveSound != null) moveSound.setDelay(delayMoveSound);
 
         for (int i = 0; i < enemies.length; i++) {
             for (int j = 0; j < enemies[i].length; j++) {
@@ -146,6 +138,14 @@ public class EnemyManager {
                 }
             }
         }
+    }
+
+    private void playMoveSound() {
+        moveSound = new SoundPlayer("src/assets/sound/invadermove.wav");
+        moveSound.setVolume(-10.0f);
+        moveSound.setLoop(true);
+        moveSound.setDelay(delayMoveSound);
+        moveSound.play();
     }
 
     private void handleUFO() {
@@ -173,6 +173,7 @@ public class EnemyManager {
         float startX = leftToRight ? 0 : 900;
         float velX = leftToRight ? 0.4f : -0.4f;
         ufo = new UFO(startX, 80, velX);
+        ufo.playSound();
     }
 
     private void updateAndCheckUFO() {
