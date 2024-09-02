@@ -8,21 +8,25 @@ import entities.enemy.EnemyC;
 import fontLoader.FontLoader;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class GameMenu {
     private final String planetText, invadersText, playText, ten, twenty, forty, mystery;
     private final Font planetFont, invadersFont, ptsFont, playFont;
-    private final Color whiteColor, greenColor, tintColor;
+    private final Color blackColor, whiteColor, greenColor, tintColor;
     private final EnemyA enemyA;
     private final EnemyB enemyB;
     private final EnemyC enemyC;
     private final UFO ufo;
-    private int blinkFreq, blinkTimer;
+    private int blinkFreq, blinkTimer, numOfStars;
     private boolean visible;
+    private ArrayList<Point> stars;
 
     public GameMenu() {
         blinkFreq = 120;
         visible = true;
+        numOfStars = 200;
 
         enemyA = new EnemyA(0, 0, 0, 0, 0);
         enemyB = new EnemyB(0, 0, 0, 0, 0);
@@ -34,6 +38,7 @@ public class GameMenu {
         ptsFont = FontLoader.loadFont("/assets/fonts/ITCMachineMedium.otf", 40f);
         playFont = FontLoader.loadFont("/assets/fonts/ITCMachineMedium.otf", 40f);
 
+        blackColor = GameColors.BACKGROUND.getColor();
         whiteColor = GameColors.TEXT.getColor();
         greenColor = GameColors.PLAYER.getColor();
         tintColor = GameColors.ENEMY.getColor();
@@ -45,12 +50,19 @@ public class GameMenu {
         forty = "= 40 pts";
         mystery = "= ??? pts";
         playText = "press enter to play";
+
+        generateStars();
     }
 
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g.setColor(Color.BLACK);
+        g.setColor(blackColor);
         g.fillRect(0, 0, GamePanel.getScreenWidth(), GamePanel.getScreenHeight());
+
+        g.setColor(whiteColor);
+        for (Point star : stars) {
+            g.fillRect(star.x, star.y, 2, 2);
+        }
 
         g2d.setFont(planetFont);
         g2d.setColor(whiteColor);
@@ -81,6 +93,16 @@ public class GameMenu {
         if (blinkTimer >= blinkFreq) {
             visible = !visible;
             blinkTimer = 0;
+        }
+    }
+
+    private void generateStars() {
+        stars = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < numOfStars; i++) {
+            int x = random.nextInt(GamePanel.getScreenWidth());
+            int y = random.nextInt(GamePanel.getScreenHeight());
+            stars.add(new Point(x, y));
         }
     }
 

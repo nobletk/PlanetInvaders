@@ -18,6 +18,7 @@ public class Game implements Runnable {
     private TaskManager taskManager;
     private GameScore score;
     private GameMenu gameMenu;
+    private GameBackground background;
     private boolean running;
 
     public Game() {
@@ -25,7 +26,6 @@ public class Game implements Runnable {
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocusInWindow();
-        gameMenu = new GameMenu();
         startGameThread();
     }
 
@@ -99,6 +99,7 @@ public class Game implements Runnable {
                 gameMenu.render(g);
                 break;
             case RUNNING:
+                background.render(g);
                 player.render(g);
                 ammoManager.render(g);
                 enemyManager.render(g);
@@ -110,6 +111,8 @@ public class Game implements Runnable {
     }
 
     private void init() {
+        gameMenu = new GameMenu();
+        background = new GameBackground();
         score = new GameScore(this);
         player = new Player(400, 900);
         bunkerManager = new BunkerManager(70, 820, this);
