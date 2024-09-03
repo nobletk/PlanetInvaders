@@ -11,13 +11,13 @@ public class GameScore {
     private final Color textColor, playerColor;
     private Font itcMachineFont;
     private List<Player> livesList = new ArrayList<>();
-    private int playerScore;
+    private int playerScore, hiScore;
     private int numOfLives;
 
     public GameScore(Game game) {
         this.playerScore = 0;
         this.numOfLives = 3;
-        this.itcMachineFont = FontLoader.loadFont("/assets/fonts/ITCMachineMedium.otf", 26f);
+        this.itcMachineFont = FontLoader.loadFont("/assets/fonts/ITCMachineMedium.otf", 30f);
         this.textColor = GameColors.TEXT.getColor();
         this.playerColor = GameColors.PLAYER.getColor();
         initLives();
@@ -26,15 +26,19 @@ public class GameScore {
     //screenWidth = 900, height = 1024
     public void render(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
+        String scoreText = "score <1>";
+        String hiScoreText = "hi-score";
 
         g2D.setFont(itcMachineFont);
         g2D.setColor(textColor);
-        g2D.drawString("SCORE<1>", 40, 40);
-        g2D.drawString(getPaddedScore(), 40, 65);
+        g2D.drawString(scoreText, 40, 35);
+        g2D.drawString(hiScoreText, 400, 35);
+        g2D.drawString(getPaddedScore(playerScore), 60, 65);
+        g2D.drawString(getPaddedScore(hiScore), 420, 65);
 
 
         g.setColor(playerColor);
-        for (int i = 0; i < numOfLives; i++) {
+        for (int i = 0; i < numOfLives - 1; i++) {
             Player p = livesList.get(i);
             p.render(g);
         }
@@ -44,7 +48,8 @@ public class GameScore {
         g2D.drawLine(20, 950, 880, 950);
     }
 
-    public void update() {
+    public void updateHighScore() {
+        if (playerScore > hiScore) hiScore = playerScore;
     }
 
     private void initLives() {
@@ -62,8 +67,12 @@ public class GameScore {
 
     public void removeLife() {
         numOfLives--;
+        if (numOfLives == 0) {
+            GameState.state = GameState.GAME_OVER;
+        }
     }
 
+    //TODO: add life 1500 pts
     public void addLife() {
         numOfLives++;
     }
@@ -72,7 +81,7 @@ public class GameScore {
         return numOfLives;
     }
 
-    private String getPaddedScore() {
-        return String.format("%04d", playerScore);
+    private String getPaddedScore(int score) {
+        return String.format("%04d", score);
     }
 }

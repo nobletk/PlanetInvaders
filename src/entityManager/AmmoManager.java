@@ -100,4 +100,8 @@ public class AmmoManager {
     public void removeEnemyBullet(Bomb b) {
         enemyBullets.remove(b);
     }
+
+    public int getPlayerBulletsListSize() {
+        return playerBullets.size();
+    }
 }

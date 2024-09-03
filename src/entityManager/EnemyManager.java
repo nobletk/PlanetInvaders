@@ -82,6 +82,10 @@ public class EnemyManager {
         updateEnemyMovement();
     }
 
+    public void stopMoveSound() {
+        if (moveSound != null) moveSound.stop();
+    }
+
     private void updateDeadEnemies() {
         for (int i = 0; i < enemies.length; i++) {
             for (int j = 0; j < enemies[i].length; j++) {
@@ -130,13 +134,19 @@ public class EnemyManager {
             for (int j = 0; j < enemies[i].length; j++) {
                 Enemy e = enemies[i][j];
                 if (e != null) {
-                    //TODO: gameOver when hitting bunkers
+                    invasionGameOverCheck(e);
                     e.setIncVelX(-e.getIncVelX());
                     e.setVelX(-e.getVelX() + e.getIncVelX());
                     e.moveDownward();
                     e.update();
                 }
             }
+        }
+    }
+
+    private void invasionGameOverCheck(Enemy e) {
+        if (e.getY() == 780f) {
+            GameState.state = GameState.GAME_OVER;
         }
     }
 

@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyInput implements KeyListener {
-    public static boolean leftPressed, rightPressed, spacePressed, enterPressed;
+    public static boolean leftPressed, rightPressed, spacePressed, enterPressed, escPressed;
     private Game game;
     private AmmoManager ammoManager;
     private Player player;
@@ -36,7 +36,7 @@ public class KeyInput implements KeyListener {
                 }
                 break;
             case KeyEvent.VK_SPACE:
-                if (GameState.state == GameState.RUNNING) {
+                if (GameState.state == GameState.RUNNING && onePlayerBullet()) {
                     spacePressed = true;
                     ammoManager.addPlayerBullet(player.getX() + (float) player.getWidth() / 2, player.getY() - 20);
                 }
@@ -48,6 +48,12 @@ public class KeyInput implements KeyListener {
                     GameState.state = GameState.RUNNING;
                 }
                 break;
+            case KeyEvent.VK_ESCAPE:
+                if (GameState.state == GameState.GAME_OVER) {
+                    escPressed = true;
+                    System.out.println("esc pressed");
+                    System.exit(0);
+                }
         }
     }
 
@@ -66,6 +72,13 @@ public class KeyInput implements KeyListener {
             case KeyEvent.VK_ENTER:
                 enterPressed = false;
                 break;
+            case KeyEvent.VK_ESCAPE:
+                escPressed = false;
+                break;
         }
+    }
+
+    private boolean onePlayerBullet() {
+        return ammoManager.getPlayerBulletsListSize() == 0;
     }
 }

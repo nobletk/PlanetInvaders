@@ -19,6 +19,7 @@ public class Game implements Runnable {
     private GameScore score;
     private GameMenu gameMenu;
     private GameBackground background;
+    private GameOver gameOver;
     private boolean running;
 
     public Game() {
@@ -82,13 +83,18 @@ public class Game implements Runnable {
             case MENU:
                 gameMenu.update();
                 break;
+            case GAME_OVER:
+                if (enemyManager.getUFO() != null) enemyManager.getUFO().stopSound();
+                enemyManager.stopMoveSound();
+                score.updateHighScore();
+                gameOver.update();
+                break;
             case RUNNING:
                 player.update();
                 ammoManager.update();
                 enemyManager.update();
                 bunkerManager.update();
                 taskManager.update();
-                score.update();
                 break;
         }
     }
@@ -99,12 +105,16 @@ public class Game implements Runnable {
                 gameMenu.render(g);
                 break;
             case RUNNING:
+            case GAME_OVER:
                 background.render(g);
                 player.render(g);
                 ammoManager.render(g);
                 enemyManager.render(g);
                 bunkerManager.render(g);
                 score.render(g);
+                if (GameState.state == GameState.GAME_OVER) {
+                    gameOver.render(g);
+                }
                 break;
         }
 
@@ -119,6 +129,7 @@ public class Game implements Runnable {
         enemyManager = new EnemyManager(50, 200, this);
         ammoManager = new AmmoManager(this);
         taskManager = new TaskManager(this);
+        gameOver = new GameOver();
     }
 
     public Player getPlayer() {
