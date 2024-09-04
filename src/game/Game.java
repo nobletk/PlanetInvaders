@@ -88,6 +88,7 @@ public class Game implements Runnable {
                 enemyManager.stopMoveSound();
                 score.updateHighScore();
                 gameOver.update();
+                if (KeyInput.restartPressed) restartGame();
                 break;
             case RUNNING:
                 player.update();
@@ -117,7 +118,18 @@ public class Game implements Runnable {
                 }
                 break;
         }
+    }
 
+    private void restartGame() {
+        score.resetScore();
+        player = new Player(400, 900);
+        bunkerManager = new BunkerManager(70, 820, this);
+        enemyManager = new EnemyManager(50, 200, this);
+        ammoManager = new AmmoManager(this);
+        taskManager = new TaskManager(this);
+        gameOver = new GameOver();
+        GameState.state = GameState.RUNNING;
+        gamePanel.getKeyInput().refreshInstances();
     }
 
     private void init() {

@@ -20,8 +20,7 @@ public class GameOver {
 
         white = GameColors.TEXT.getColor();
         gameOverText = "game over";
-        //TODO: implement restarting the game
-        promptText = "press enter to try again or esc to exit";
+        promptText = "press R to restart or Q to exit";
     }
 
     public void render(Graphics g) {

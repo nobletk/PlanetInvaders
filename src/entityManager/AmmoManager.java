@@ -12,9 +12,7 @@ import java.awt.*;
 import java.util.LinkedList;
 
 public class AmmoManager {
-    private Game game;
     private Player player;
-    private EnemyManager enemyManager;
     private GameScore score;
     private Collision collision;
 
@@ -22,9 +20,7 @@ public class AmmoManager {
     private LinkedList<Bomb> enemyBullets = new LinkedList<>();
 
     public AmmoManager(Game game) {
-        this.game = game;
         this.player = game.getPlayer();
-        this.enemyManager = game.getEnemyManager();
         this.score = game.getScore();
         this.collision = new Collision(game);
     }

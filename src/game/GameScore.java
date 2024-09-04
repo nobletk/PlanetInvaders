@@ -81,6 +81,11 @@ public class GameScore {
         return numOfLives;
     }
 
+    public void resetScore() {
+        playerScore = 0;
+        numOfLives = 3;
+    }
+
     private String getPaddedScore(int score) {
         return String.format("%04d", score);
     }
