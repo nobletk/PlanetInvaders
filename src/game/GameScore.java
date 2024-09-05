@@ -12,11 +12,15 @@ public class GameScore {
     private Font itcMachineFont;
     private List<Player> livesList = new ArrayList<>();
     private int playerScore, hiScore;
-    private int numOfLives;
+    private int numOfLives, maxLives, extraLifeThreshold;
+    private boolean extraLifeGained;
 
-    public GameScore(Game game) {
+    public GameScore() {
         this.playerScore = 0;
         this.numOfLives = 3;
+        this.maxLives = 4;
+        this.extraLifeThreshold = 10;
+        this.extraLifeGained = false;
         this.itcMachineFont = FontLoader.loadFont("/assets/fonts/ITCMachineMedium.otf", 30f);
         this.textColor = GameColors.TEXT.getColor();
         this.playerColor = GameColors.PLAYER.getColor();
@@ -48,12 +52,16 @@ public class GameScore {
         g2D.drawLine(20, 950, 880, 950);
     }
 
+    public void update() {
+        extraLifeCheck();
+    }
+
     public void updateHighScore() {
         if (playerScore > hiScore) hiScore = playerScore;
     }
 
     private void initLives() {
-        for (int i = 0; i < numOfLives; i++) {
+        for (int i = 0; i < maxLives; i++) {
             Player p = new Player(0, 0);
             float x = 70 + i * (p.getWidth() + 15);
             float y = 960;
@@ -72,9 +80,14 @@ public class GameScore {
         }
     }
 
-    //TODO: add life 1500 pts
-    public void addLife() {
-        numOfLives++;
+    public void extraLifeCheck() {
+        if (playerScore >= extraLifeThreshold && numOfLives < maxLives && !extraLifeGained) {
+            SoundPlayer sound = new SoundPlayer("src/assets/sound/newLife.wav");
+            sound.setVolume(-10.0f);
+            sound.play();
+            numOfLives += 1;
+            extraLifeGained = true;
+        }
     }
 
     public int getNumOfLives() {
@@ -84,6 +97,7 @@ public class GameScore {
     public void resetScore() {
         playerScore = 0;
         numOfLives = 3;
+        extraLifeGained = false;
     }
 
     private String getPaddedScore(int score) {

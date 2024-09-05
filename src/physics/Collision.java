@@ -3,14 +3,14 @@ package physics;
 import entities.Bunker;
 import entities.Entity;
 import entities.Player;
+import entities.UFO;
 import entities.ammo.Ammo;
 import entities.ammo.Bomb;
 import entities.ammo.Bullet;
 import entities.enemy.Enemy;
-import entities.UFO;
 import entityManager.BunkerManager;
 import entityManager.EnemyManager;
-import game.Game;
+import levels.LevelManager;
 
 import java.awt.*;
 import java.util.List;
@@ -20,10 +20,10 @@ public class Collision {
     private BunkerManager bunkerManager;
     private Player player;
 
-    public Collision(Game game) {
-        this.enemyManager = game.getEnemyManager();
-        this.bunkerManager = game.getBunkerManager();
-        this.player = game.getPlayer();
+    public Collision(LevelManager levelManager) {
+        this.enemyManager = levelManager.getEnemyManager();
+        this.bunkerManager = levelManager.getBunkerManager();
+        this.player = levelManager.getPlayer();
     }
 
     public boolean checkBunkerCollision(Ammo ammo) {

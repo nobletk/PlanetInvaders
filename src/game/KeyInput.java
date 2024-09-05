@@ -14,8 +14,8 @@ public class KeyInput implements KeyListener {
 
     public KeyInput(GamePanel gamePanel) {
         this.game = gamePanel.getGame();
-        this.player = game.getPlayer();
-        this.ammoManager = game.getAmmoManager();
+        this.player = game.getLevelManager().getPlayer();
+        this.ammoManager = game.getLevelManager().getAmmoManager();
     }
 
     @Override
@@ -89,8 +89,8 @@ public class KeyInput implements KeyListener {
     }
 
     public void refreshInstances() {
-        this.player = game.getPlayer();
-        this.ammoManager = game.getAmmoManager();
+        this.player = game.getLevelManager().getPlayer();
+        this.ammoManager = game.getLevelManager().getAmmoManager();
     }
 
     private boolean onePlayerBullet() {

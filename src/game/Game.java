@@ -1,32 +1,19 @@
 package game;
 
-import entities.Player;
-import entityManager.AmmoManager;
-import entityManager.BunkerManager;
-import entityManager.EnemyManager;
-import entityManager.TaskManager;
+import levels.LevelManager;
 
 import java.awt.*;
 
 public class Game implements Runnable {
     private GameWindow gameWindow;
     private GamePanel gamePanel;
-    private Player player;
-    private AmmoManager ammoManager;
-    private EnemyManager enemyManager;
-    private BunkerManager bunkerManager;
-    private TaskManager taskManager;
-    private GameScore score;
     private GameMenu gameMenu;
-    private GameBackground background;
     private GameOver gameOver;
+    private LevelManager levelManager;
     private boolean running;
 
     public Game() {
         init();
-        gamePanel = new GamePanel(this);
-        gameWindow = new GameWindow(gamePanel);
-        gamePanel.requestFocusInWindow();
         startGameThread();
     }
 
@@ -83,19 +70,21 @@ public class Game implements Runnable {
             case MENU:
                 gameMenu.update();
                 break;
-            case GAME_OVER:
-                if (enemyManager.getUFO() != null) enemyManager.getUFO().stopSound();
-                enemyManager.stopMoveSound();
-                score.updateHighScore();
-                gameOver.update();
-                if (KeyInput.restartPressed) restartGame();
-                break;
             case RUNNING:
-                player.update();
-                ammoManager.update();
-                enemyManager.update();
-                bunkerManager.update();
-                taskManager.update();
+                levelManager.update();
+                break;
+            case LEVEL_COMPLETE:
+                levelManager.update();
+                gamePanel.getKeyInput().refreshInstances();
+                break;
+            case GAME_OVER:
+                levelManager.gameOverCleanup();
+                gameOver.update();
+                if (KeyInput.restartPressed) {
+                    levelManager.resetLevels();
+                    gamePanel.getKeyInput().refreshInstances();
+                    GameState.state = GameState.RUNNING;
+                }
                 break;
         }
     }
@@ -107,64 +96,24 @@ public class Game implements Runnable {
                 break;
             case RUNNING:
             case GAME_OVER:
-                background.render(g);
-                player.render(g);
-                ammoManager.render(g);
-                enemyManager.render(g);
-                bunkerManager.render(g);
-                score.render(g);
-                if (GameState.state == GameState.GAME_OVER) {
+            case LEVEL_COMPLETE:
+                levelManager.render(g);
+                if (GameState.state == GameState.GAME_OVER)
                     gameOver.render(g);
-                }
                 break;
         }
     }
 
-    private void restartGame() {
-        score.resetScore();
-        player = new Player(400, 900);
-        bunkerManager = new BunkerManager(70, 820, this);
-        enemyManager = new EnemyManager(50, 200, this);
-        ammoManager = new AmmoManager(this);
-        taskManager = new TaskManager(this);
-        gameOver = new GameOver();
-        GameState.state = GameState.RUNNING;
-        gamePanel.getKeyInput().refreshInstances();
-    }
-
     private void init() {
         gameMenu = new GameMenu();
-        background = new GameBackground();
-        score = new GameScore(this);
-        player = new Player(400, 900);
-        bunkerManager = new BunkerManager(70, 820, this);
-        enemyManager = new EnemyManager(50, 200, this);
-        ammoManager = new AmmoManager(this);
-        taskManager = new TaskManager(this);
+        levelManager = new LevelManager();
         gameOver = new GameOver();
+        gamePanel = new GamePanel(this);
+        gameWindow = new GameWindow(gamePanel);
+        gamePanel.requestFocusInWindow();
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
-    public AmmoManager getAmmoManager() {
-        return ammoManager;
-    }
-
-    public BunkerManager getBunkerManager() {
-        return bunkerManager;
-    }
-
-    public EnemyManager getEnemyManager() {
-        return enemyManager;
-    }
-
-    public TaskManager getTaskManager() {
-        return taskManager;
-    }
-
-    public GameScore getScore() {
-        return score;
+    public LevelManager getLevelManager() {
+        return levelManager;
     }
 }

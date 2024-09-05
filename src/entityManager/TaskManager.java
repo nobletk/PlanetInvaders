@@ -1,16 +1,16 @@
 package entityManager;
 
 import entities.enemy.Enemy;
-import game.Game;
+import levels.LevelManager;
 
 public class TaskManager {
     private AmmoManager ammoManager;
     private Enemy[][] enemies;
     private int enemyShotCooldown = 0;
 
-    public TaskManager(Game game) {
-        this.ammoManager = game.getAmmoManager();
-        this.enemies = game.getEnemyManager().getEnemies();
+    public TaskManager(LevelManager levelManager) {
+        this.ammoManager = levelManager.getAmmoManager();
+        this.enemies = levelManager.getEnemyManager().getEnemies();
     }
 
     public void update() {

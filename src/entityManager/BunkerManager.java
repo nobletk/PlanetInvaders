@@ -1,7 +1,6 @@
 package entityManager;
 
 import entities.Bunker;
-import game.Game;
 import game.GamePanel;
 
 import java.awt.*;
@@ -9,12 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BunkerManager {
-    private List<Bunker> bunkers = new ArrayList<>();
-    private Game game;
-    private float x, y;
+    private final List<Bunker> bunkers = new ArrayList<>();
+    private final float x, y;
 
-    public BunkerManager(float x, float y, Game game) {
-        this.game = game;
+    public BunkerManager(float x, float y) {
         this.x = x;
         this.y = y;
         initBunkers();

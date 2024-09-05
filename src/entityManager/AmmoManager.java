@@ -3,9 +3,9 @@ package entityManager;
 import entities.Player;
 import entities.ammo.Bomb;
 import entities.ammo.Bullet;
-import game.Game;
 import game.GamePanel;
 import game.GameScore;
+import levels.LevelManager;
 import physics.Collision;
 
 import java.awt.*;
@@ -19,10 +19,10 @@ public class AmmoManager {
     private LinkedList<Bullet> playerBullets = new LinkedList<>();
     private LinkedList<Bomb> enemyBullets = new LinkedList<>();
 
-    public AmmoManager(Game game) {
-        this.player = game.getPlayer();
-        this.score = game.getScore();
-        this.collision = new Collision(game);
+    public AmmoManager(LevelManager levelManager) {
+        this.player = levelManager.getPlayer();
+        this.score = levelManager.getScore();
+        this.collision = new Collision(levelManager);
     }
 
     public void render(Graphics g) {

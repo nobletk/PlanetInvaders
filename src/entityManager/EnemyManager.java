@@ -5,7 +5,11 @@ import entities.enemy.Enemy;
 import entities.enemy.EnemyA;
 import entities.enemy.EnemyB;
 import entities.enemy.EnemyC;
-import game.*;
+import game.GamePanel;
+import game.GameScore;
+import game.GameState;
+import game.SoundPlayer;
+import levels.LevelManager;
 
 import java.awt.*;
 import java.util.Random;
@@ -24,8 +28,8 @@ public class EnemyManager {
     private int delayMoveSound;
     private SoundPlayer moveSound;
 
-    public EnemyManager(float x, float y, Game game) {
-        this.score = game.getScore();
+    public EnemyManager(float x, float y, LevelManager levelManager) {
+        this.score = levelManager.getScore();
         this.velX = 0.2f;
         this.velY = 10f;
         this.incVelX = 0.03f;
@@ -93,9 +97,7 @@ public class EnemyManager {
                 if (e != null && e.isDead()) {
                     if (!e.isExploding() && !e.isReadyForRemoval()) {
                         e.destroy();
-                        SoundPlayer sound = new SoundPlayer("src/assets/sound/invaderkilled.wav");
-                        sound.setVolume(-10.0f);
-                        sound.play();
+                        playDeathSound();
                         score.addPoints(e.getPoints());
                     }
                     if (e.isReadyForRemoval()) {
@@ -104,6 +106,12 @@ public class EnemyManager {
                 }
             }
         }
+    }
+
+    private void playDeathSound() {
+        SoundPlayer sound = new SoundPlayer("src/assets/sound/invaderkilled.wav");
+        sound.setVolume(-10.0f);
+        sound.play();
     }
 
     private void updateEnemyMovement() {
