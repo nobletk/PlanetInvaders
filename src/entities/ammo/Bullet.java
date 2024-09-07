@@ -2,7 +2,7 @@ package entities.ammo;
 
 import entities.Entity;
 import game.GameColors;
-import game.SoundPlayer;
+import utils.SoundPlayer;
 
 import java.awt.*;
 

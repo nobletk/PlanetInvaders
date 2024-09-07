@@ -6,14 +6,22 @@ import entityManager.AmmoManager;
 import entityManager.BunkerManager;
 import entityManager.EnemyManager;
 import entityManager.TaskManager;
-import fontLoader.FontLoader;
-import game.*;
+import game.GameBackground;
+import game.GameColors;
+import game.GameScore;
+import game.GameState;
+import physics.Collision;
+import utils.FontLoader;
 
 import java.awt.*;
+
+import static utils.GraphicsUtils.drawCenteredText;
 
 public class LevelManager {
     private final Font levelFont;
     private final Color textColor;
+    private final int MAX_LEVEL, moveSoundDelay;
+    private final float playerInitX, playerInitY, bunkerInitX, bunkerInitY, enemyInitX, enemyInitY, enemyInitVelX, enemyInitVelY, enemyInitIncVelX;
     private GameScore score;
     private Player player;
     private AmmoManager ammoManager;
@@ -26,7 +34,18 @@ public class LevelManager {
     private boolean levelComplete;
 
     public LevelManager() {
+        this.playerInitX = 400f;
+        this.playerInitY = 900f;
+        this.bunkerInitX = 70f;
+        this.bunkerInitY = 820;
+        this.enemyInitX = 50f;
+        this.enemyInitY = 200f;
+        this.enemyInitVelX = 0.2f;
+        this.enemyInitVelY = 5f;
+        this.enemyInitIncVelX = 0.03f;
+        this.moveSoundDelay = 700;
         this.currentLevel = 1;
+        this.MAX_LEVEL = 10;
         initFirstLevel();
 
         this.levelFont = FontLoader.loadFont("/assets/fonts/ITCMachineMedium.otf", 40f);
@@ -96,35 +115,43 @@ public class LevelManager {
     }
 
     private void initEntities() {
-        player = new Player(400, 900);
-        bunkerManager = new BunkerManager(70, 820);
-        enemyManager = new EnemyManager(50, 200, this);
+        player = new Player(playerInitX, playerInitY);
+        bunkerManager = new BunkerManager(bunkerInitX, bunkerInitY);
+        enemyManager = new EnemyManager(enemyInitX, enemyInitY, enemyInitVelX, enemyInitVelY, enemyInitIncVelX, moveSoundDelay, this);
         ammoManager = new AmmoManager(this);
         taskManager = new TaskManager(this);
     }
 
-    public void nextLevel() {
+    private void nextLevel() {
         System.out.printf("starting level %d\n", currentLevel);
         initNextLevel(currentLevel);
         GameState.state = GameState.RUNNING;
     }
 
     private void initNextLevel(int level) {
-        // lower the initial invaders spawn
-        // may be increase the initial speed
-        player = new Player(400, 900);
-        bunkerManager = new BunkerManager(70, 820);
-        enemyManager = new EnemyManager(50, 200, this);
+        // lower the initial invaders spawn from 200f + 50f * 4 = 400f
+        // last level should be from 500f:700f
+        // invasion/game over @ 780f
+        float newEnemyY = 33 * (level - 1) + 200;
+        float newEnemyVelX = enemyInitVelX * level;
+        int newMoveSoundDelay = moveSoundDelay - 60 * (level - 1);
+        player = new Player(playerInitX, playerInitY);
+        enemyManager = new EnemyManager(enemyInitX, newEnemyY, newEnemyVelX, enemyInitVelY, enemyInitIncVelX, newMoveSoundDelay, this);
         ammoManager = new AmmoManager(this);
         taskManager = new TaskManager(this);
     }
 
     private void checkLevelCompletion() {
-        if (levelComplete) {
+        if (levelComplete && currentLevel < MAX_LEVEL) {
             GameState.state = GameState.LEVEL_COMPLETE;
             currentLevel++;
             levelText = "level " + currentLevel;
             nextLevelDelay = 120;
+            levelComplete = false;
+        }
+        if (levelComplete && currentLevel == MAX_LEVEL) {
+            System.out.println("you won");
+            GameState.state = GameState.WON;
             levelComplete = false;
         }
     }
@@ -148,17 +175,6 @@ public class LevelManager {
             enemyManager.stopMoveSound();
             levelComplete = true;
         }
-    }
-
-    private void drawCenteredText(Graphics2D g2d, String text, int y) {
-        FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
-        int textWidth = metrics.stringWidth(text);
-        int x = (GamePanel.getScreenWidth() - textWidth) / 2;
-        g2d.drawString(text, x, y);
-    }
-
-    public int getCurrentLevel() {
-        return currentLevel;
     }
 
     public Player getPlayer() {

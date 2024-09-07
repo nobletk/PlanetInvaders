@@ -8,22 +8,38 @@ import entities.ammo.Ammo;
 import entities.ammo.Bomb;
 import entities.ammo.Bullet;
 import entities.enemy.Enemy;
+import entityManager.AmmoManager;
 import entityManager.BunkerManager;
 import entityManager.EnemyManager;
 import levels.LevelManager;
 
 import java.awt.*;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Collision {
-    private EnemyManager enemyManager;
-    private BunkerManager bunkerManager;
-    private Player player;
+    private final EnemyManager enemyManager;
+    private final BunkerManager bunkerManager;
+    private final Player player;
+    private final AmmoManager ammoManager;
 
-    public Collision(LevelManager levelManager) {
-        this.enemyManager = levelManager.getEnemyManager();
-        this.bunkerManager = levelManager.getBunkerManager();
+    public Collision(LevelManager levelManager, AmmoManager ammoManager) {
         this.player = levelManager.getPlayer();
+        this.bunkerManager = levelManager.getBunkerManager();
+        this.enemyManager = levelManager.getEnemyManager();
+        this.ammoManager = ammoManager;
+    }
+
+    public boolean checkEnemyBombCollision(Bullet bullet) {
+        LinkedList<Bomb> enemyBombs = ammoManager.getEnemyBombs();
+        for (int i = 0; i < enemyBombs.size(); i++) {
+            Bomb bomb = enemyBombs.get(i);
+            if (isAmmoColliding(bullet, bomb)) {
+                ammoManager.removeEnemyBomb(bomb);
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean checkBunkerCollision(Ammo ammo) {
@@ -91,5 +107,11 @@ public class Collision {
         Rectangle entityBounds = e.getBounds(x, y, e.getBlockWidth(), e.getBlockHeight());
         Rectangle ammoBounds = a.getBounds(a.getX(), a.getY(), a.getBlockWidth(), a.getBlockHeight());
         return entityBounds.intersects(ammoBounds);
+    }
+
+    private boolean isAmmoColliding(Bullet bullet, Bomb bomb) {
+        Rectangle bulletBounds = bullet.getBounds(bullet.getX(), bullet.getY(), bullet.getBlockWidth(), bullet.getBlockHeight());
+        Rectangle bombBounds = bomb.getBounds(bomb.getX(), bomb.getY(), bomb.getBlockWidth(), bomb.getBlockHeight());
+        return bulletBounds.intersects(bombBounds);
     }
 }

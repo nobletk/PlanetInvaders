@@ -12,17 +12,19 @@ import java.awt.*;
 import java.util.LinkedList;
 
 public class AmmoManager {
-    private Player player;
-    private GameScore score;
-    private Collision collision;
-
-    private LinkedList<Bullet> playerBullets = new LinkedList<>();
-    private LinkedList<Bomb> enemyBullets = new LinkedList<>();
+    private final float bulletVel, bombVel;
+    private final Player player;
+    private final GameScore score;
+    private final Collision collision;
+    private final LinkedList<Bullet> playerBullets = new LinkedList<>();
+    private final LinkedList<Bomb> enemyBullets = new LinkedList<>();
 
     public AmmoManager(LevelManager levelManager) {
         this.player = levelManager.getPlayer();
         this.score = levelManager.getScore();
-        this.collision = new Collision(levelManager);
+        this.collision = new Collision(levelManager, this);
+        this.bulletVel = -3.5f;
+        this.bombVel = 1.5f;
     }
 
     public void render(Graphics g) {
@@ -56,6 +58,9 @@ public class AmmoManager {
             if (collision.checkUFOCollision(b)) {
                 removePlayerBullet(b);
             }
+            if (collision.checkEnemyBombCollision(b)) {
+                removePlayerBullet(b);
+            }
             b.update();
         }
     }
@@ -64,17 +69,17 @@ public class AmmoManager {
         for (int i = 0; i < enemyBullets.size(); i++) {
             Bomb b = enemyBullets.get(i);
             if (b.getY() > GamePanel.getScreenHeight()) {
-                removeEnemyBullet(b);
+                removeEnemyBomb(b);
             }
             if (collision.checkBunkerCollision(b)) {
-                removeEnemyBullet(b);
+                removeEnemyBomb(b);
             }
             if (collision.checkPlayerCollision(b) && !player.isRespawning()) {
                 if (score.getNumOfLives() > 0) {
                     player.playExplosion();
                     score.removeLife();
                     player.respawn();
-                    removeEnemyBullet(b);
+                    removeEnemyBomb(b);
                 }
             }
             b.update();
@@ -82,7 +87,7 @@ public class AmmoManager {
     }
 
     public void addPlayerBullet(float x, float y) {
-        playerBullets.add(new Bullet(x, y, -2));
+        playerBullets.add(new Bullet(x, y, bulletVel));
     }
 
     public void removePlayerBullet(Bullet b) {
@@ -90,14 +95,18 @@ public class AmmoManager {
     }
 
     public void addEnemyBullet(float x, float y) {
-        enemyBullets.add(new Bomb(x, y, 1));
+        enemyBullets.add(new Bomb(x, y, bombVel));
     }
 
-    public void removeEnemyBullet(Bomb b) {
+    public void removeEnemyBomb(Bomb b) {
         enemyBullets.remove(b);
     }
 
     public int getPlayerBulletsListSize() {
         return playerBullets.size();
+    }
+
+    public LinkedList<Bomb> getEnemyBombs() {
+        return enemyBullets;
     }
 }

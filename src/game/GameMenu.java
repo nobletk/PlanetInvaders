@@ -1,15 +1,17 @@
 package game;
 
-import entities.Entity;
 import entities.UFO;
 import entities.enemy.EnemyA;
 import entities.enemy.EnemyB;
 import entities.enemy.EnemyC;
-import fontLoader.FontLoader;
+import utils.FontLoader;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
+
+import static utils.GraphicsUtils.centerInvadersAndPts;
+import static utils.GraphicsUtils.drawCenteredText;
 
 public class GameMenu {
     private final String planetText, invadersText, playText, ten, twenty, forty, mystery;
@@ -104,27 +106,5 @@ public class GameMenu {
             int y = random.nextInt(GamePanel.getScreenHeight());
             stars.add(new Point(x, y));
         }
-    }
-
-    private void drawCenteredText(Graphics2D g2d, String text, int y) {
-        FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
-        int textWidth = metrics.stringWidth(text);
-        int x = (GamePanel.getScreenWidth() - textWidth) / 2;
-        g2d.drawString(text, x, y);
-    }
-
-    private void centerInvadersAndPts(Graphics g, Entity entity, String ptsText, int y) {
-        Graphics2D g2d = (Graphics2D) g;
-        int entityWidth = entity.getWidth();
-        int entityHeight = entity.getHeight();
-        FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
-        int textWidth = metrics.stringWidth(ptsText);
-        int totalWidth = entityWidth + textWidth + 10;
-        int xStart = (GamePanel.getScreenWidth() - totalWidth) / 2;
-
-        entity.setPosition(xStart, y);
-        entity.render(g);
-        int textY = y + (entityHeight / 2) + (metrics.getAscent() / 2) - 2;
-        g2d.drawString(ptsText, xStart + entityWidth + 10, textY);
     }
 }

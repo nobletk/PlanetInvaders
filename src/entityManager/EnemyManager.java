@@ -8,8 +8,8 @@ import entities.enemy.EnemyC;
 import game.GamePanel;
 import game.GameScore;
 import game.GameState;
-import game.SoundPlayer;
 import levels.LevelManager;
+import utils.SoundPlayer;
 
 import java.awt.*;
 import java.util.Random;
@@ -25,15 +25,15 @@ public class EnemyManager {
     private int ufoCooldown;
     private Random random;
     private float velX, velY, incVelX;
-    private int delayMoveSound;
+    private int moveSoundDelay;
     private SoundPlayer moveSound;
 
-    public EnemyManager(float x, float y, LevelManager levelManager) {
+    public EnemyManager(float x, float y, float velX, float velY, float incVelX, int moveSoundDelay, LevelManager levelManager) {
         this.score = levelManager.getScore();
-        this.velX = 0.2f;
-        this.velY = 10f;
-        this.incVelX = 0.03f;
-        this.delayMoveSound = 700;
+        this.velX = velX;
+        this.velY = velY;
+        this.incVelX = incVelX;
+        this.moveSoundDelay = moveSoundDelay;
         this.random = new Random();
         this.ufoCooldown = random.nextInt(1000) + 3000;
 
@@ -51,13 +51,13 @@ public class EnemyManager {
                 float yPos = i * 50 + y;
                 switch (enemyGrid[i][j]) {
                     case 1:
-                        enemies[i][j] = new EnemyA(xPos, yPos, velX, velY, incVelX);
+                        enemies[i][j] = new EnemyA(xPos, yPos, this.velX, this.velY, this.incVelX);
                         break;
                     case 2:
-                        enemies[i][j] = new EnemyB(xPos, yPos, velX, velY, incVelX);
+                        enemies[i][j] = new EnemyB(xPos, yPos, this.velX, this.velY, this.incVelX);
                         break;
                     case 3:
-                        enemies[i][j] = new EnemyC(xPos, yPos, velX, velY, incVelX);
+                        enemies[i][j] = new EnemyC(xPos, yPos, this.velX, this.velY, this.incVelX);
                         break;
                 }
             }
@@ -135,18 +135,18 @@ public class EnemyManager {
     }
 
     private void changeEnemyDir() {
-        delayMoveSound -= 1;
-        if (moveSound != null) moveSound.setDelay(delayMoveSound);
+        moveSoundDelay -= 1;
+        if (moveSound != null) moveSound.setDelay(moveSoundDelay);
 
         for (int i = 0; i < enemies.length; i++) {
             for (int j = 0; j < enemies[i].length; j++) {
                 Enemy e = enemies[i][j];
                 if (e != null) {
-                    invasionGameOverCheck(e);
                     e.setIncVelX(-e.getIncVelX());
                     e.setVelX(-e.getVelX() + e.getIncVelX());
                     e.moveDownward();
                     e.update();
+                    invasionGameOverCheck(e);
                 }
             }
         }
@@ -162,7 +162,7 @@ public class EnemyManager {
         moveSound = new SoundPlayer("src/assets/sound/invadermove.wav");
         moveSound.setVolume(-10.0f);
         moveSound.setLoop(true);
-        moveSound.setDelay(delayMoveSound);
+        moveSound.setDelay(moveSoundDelay);
         moveSound.play();
     }
 
@@ -188,7 +188,7 @@ public class EnemyManager {
     //screenWidth = 900, height = 1024
     private void spawnUFO() {
         boolean leftToRight = leftToRightUFO();
-        float startX = leftToRight ? 0 : 900;
+        float startX = leftToRight ? 0 : GamePanel.getScreenWidth();
         float velX = leftToRight ? 0.4f : -0.4f;
         ufo = new UFO(startX, 80, velX);
         ufo.playSound();

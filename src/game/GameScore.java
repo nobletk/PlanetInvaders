@@ -1,7 +1,8 @@
 package game;
 
 import entities.Player;
-import fontLoader.FontLoader;
+import utils.FontLoader;
+import utils.SoundPlayer;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,17 +10,19 @@ import java.util.List;
 
 public class GameScore {
     private final Color textColor, playerColor;
-    private Font itcMachineFont;
-    private List<Player> livesList = new ArrayList<>();
+    private final Font itcMachineFont;
+    private final List<Player> livesList = new ArrayList<>();
+    private final int maxLives;
+    private final int extraLifeThreshold;
     private int playerScore, hiScore;
-    private int numOfLives, maxLives, extraLifeThreshold;
+    private int numOfLives;
     private boolean extraLifeGained;
 
     public GameScore() {
         this.playerScore = 0;
         this.numOfLives = 3;
         this.maxLives = 4;
-        this.extraLifeThreshold = 10;
+        this.extraLifeThreshold = 1000;
         this.extraLifeGained = false;
         this.itcMachineFont = FontLoader.loadFont("/assets/fonts/ITCMachineMedium.otf", 30f);
         this.textColor = GameColors.TEXT.getColor();

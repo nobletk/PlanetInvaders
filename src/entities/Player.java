@@ -3,7 +3,7 @@ package entities;
 import game.GameColors;
 import game.GamePanel;
 import game.KeyInput;
-import game.SoundPlayer;
+import utils.SoundPlayer;
 
 import java.awt.*;
 

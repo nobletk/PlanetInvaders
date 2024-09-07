@@ -49,14 +49,14 @@ public class KeyInput implements KeyListener {
                 }
                 break;
             case KeyEvent.VK_R:
-                if (GameState.state == GameState.GAME_OVER) {
+                if (GameState.state == GameState.GAME_OVER || GameState.state == GameState.WON) {
                     restartPressed = true;
 //                    System.out.println("restarting");
                     break;
                 }
                 break;
             case KeyEvent.VK_Q:
-                if (GameState.state == GameState.GAME_OVER) {
+                if (GameState.state == GameState.GAME_OVER || GameState.state == GameState.WON) {
                     quitPressed = true;
 //                    System.out.println("q pressed");
                     System.exit(0);

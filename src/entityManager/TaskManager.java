@@ -4,8 +4,8 @@ import entities.enemy.Enemy;
 import levels.LevelManager;
 
 public class TaskManager {
-    private AmmoManager ammoManager;
-    private Enemy[][] enemies;
+    private final AmmoManager ammoManager;
+    private final Enemy[][] enemies;
     private int enemyShotCooldown = 0;
 
     public TaskManager(LevelManager levelManager) {
@@ -28,7 +28,7 @@ public class TaskManager {
 
             if (row == EnemyManager.enemyRows - 1 || enemies[row + 1][col] == null) {
                 ammoManager.addEnemyBullet(e.getX() + ((float) e.getWidth() / 2), e.getY() + e.getHeight());
-                enemyShotCooldown = 500;
+                enemyShotCooldown = 360;
 //                System.out.printf("shot %d %d\n", row, col);
             }
         }

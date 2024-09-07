@@ -78,6 +78,7 @@ public class Game implements Runnable {
                 gamePanel.getKeyInput().refreshInstances();
                 break;
             case GAME_OVER:
+            case WON:
                 levelManager.gameOverCleanup();
                 gameOver.update();
                 if (KeyInput.restartPressed) {
@@ -96,9 +97,10 @@ public class Game implements Runnable {
                 break;
             case RUNNING:
             case GAME_OVER:
+            case WON:
             case LEVEL_COMPLETE:
                 levelManager.render(g);
-                if (GameState.state == GameState.GAME_OVER)
+                if (GameState.state == GameState.GAME_OVER || GameState.state == GameState.WON)
                     gameOver.render(g);
                 break;
         }

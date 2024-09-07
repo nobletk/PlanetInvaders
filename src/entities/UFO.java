@@ -1,7 +1,7 @@
 package entities;
 
 import game.GameColors;
-import game.SoundPlayer;
+import utils.SoundPlayer;
 
 import java.awt.*;
 import java.util.Arrays;

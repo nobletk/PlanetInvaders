@@ -1,4 +1,4 @@
-package fontLoader;
+package utils;
 
 import java.awt.*;
 import java.io.IOException;

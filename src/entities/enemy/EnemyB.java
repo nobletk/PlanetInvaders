@@ -137,7 +137,9 @@ public class EnemyB extends Entity implements Enemy {
                 this.grid = original;
             }
             isMoving = !isMoving;
-            animationCooldown = 175;
+            float baseCooldown = 120;
+            float minCooldown = 30;
+            animationCooldown = (int) Math.max(minCooldown, baseCooldown - (Math.abs(velX) * 50));
         }
     }
 
