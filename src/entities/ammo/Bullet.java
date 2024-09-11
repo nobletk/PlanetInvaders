@@ -47,13 +47,12 @@ public class Bullet extends Entity implements Ammo {
 
 
     @Override
-    public Rectangle getBounds(float x, float y, int w, int h) {
+    public Rectangle getBounds(float x, float y, int width, int height) {
         int rectangleX = (int) x;
-        int rectangleY = (int) y + (int) velY;
-        int rectangleWidth = getWidth();
-        int rectangleHeight = getHeight() + (int) velY / 2;
+        int rectangleY = (int) (y + velY);
+        int rectangleHeight = height + (int) Math.round(velY / 2.0);
 
-        return new Rectangle(rectangleX, rectangleY, rectangleWidth, rectangleHeight);
+        return new Rectangle(rectangleX, rectangleY, width, rectangleHeight);
     }
 }
 

@@ -21,8 +21,8 @@ public abstract class Entity {
     public void update() {
     }
 
-    public Rectangle getBounds(float x, float y, int w, int h) {
-        return new Rectangle((int) x, (int) y, w, h);
+    public Rectangle getBounds(float x, float y, int width, int height) {
+        return new Rectangle((int) x, (int) y, width, height);
     }
 
     public int[][] getGrid() {

@@ -23,7 +23,7 @@ public class AmmoManager {
         this.player = levelManager.getPlayer();
         this.score = levelManager.getScore();
         this.collision = new Collision(levelManager, this);
-        this.bulletVel = -3.5f;
+        this.bulletVel = -4.5f;
         this.bombVel = 1.5f;
     }
 
@@ -87,6 +87,7 @@ public class AmmoManager {
     }
 
     public void addPlayerBullet(float x, float y) {
+        score.incrementPlayerBulletCount();
         playerBullets.add(new Bullet(x, y, bulletVel));
     }
 

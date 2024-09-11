@@ -45,20 +45,20 @@ public class Collision {
     public boolean checkBunkerCollision(Ammo ammo) {
         List<Bunker> bunkers = bunkerManager.getBunkers();
         for (int i = 0; i < bunkers.size(); i++) {
-            Bunker bun = bunkers.get(i);
-            if (checkCollisionWithEntity(ammo, bun)) {
+            Bunker bunker = bunkers.get(i);
+            if (checkCollisionWithEntity(ammo, bunker)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean checkEnemyCollision(Bullet b) {
+    public boolean checkEnemyCollision(Bullet bullet) {
         Enemy[][] enemies = enemyManager.getEnemies();
         for (int i = 0; i < enemies.length; i++) {
             for (int j = 0; j < enemies[i].length; j++) {
                 Enemy e = enemies[i][j];
-                if (e != null && checkCollisionWithEntity(b, (Entity) e)) {
+                if (e != null && checkCollisionWithEntity(bullet, (Entity) e)) {
                     e.setDead(true);
                     return true;
                 }
@@ -67,29 +67,27 @@ public class Collision {
         return false;
     }
 
-    public boolean checkUFOCollision(Bullet b) {
+    public boolean checkUFOCollision(Bullet bomb) {
         UFO ufo = enemyManager.getUFO();
-        if (ufo != null && checkCollisionWithEntity(b, ufo)) {
+        if (ufo != null && checkCollisionWithEntity(bomb, ufo)) {
             ufo.setDead(true);
             return true;
         }
         return false;
     }
 
-    public boolean checkPlayerCollision(Bomb b) {
-        if (checkCollisionWithEntity(b, player)) {
+    public boolean checkPlayerCollision(Bomb bomb) {
+        if (checkCollisionWithEntity(bomb, player)) {
             return true;
         }
         return false;
     }
 
-    private boolean checkCollisionWithEntity(Ammo a, Entity e) {
-        for (int row = 0; row < e.getGridHeight(); row++) {
-            for (int col = 0; col < e.getGridWidth(); col++) {
-                if (isBlockCollidable(e, row, col) && isAmmoCollidingWithBlock(a, e, row, col)) {
-                    if (e instanceof Bunker) {
-                        ((Bunker) e).destroyBlocks(row, col);
-                    }
+    private boolean checkCollisionWithEntity(Ammo ammo, Entity entity) {
+        for (int row = 0; row < entity.getGridHeight(); row++) {
+            for (int col = 0; col < entity.getGridWidth(); col++) {
+                if (isBlockCollidable(entity, row, col) && isAmmoCollidingWithBlock(ammo, entity, row, col)) {
+                    checkBunkerDestroyBlocks(entity, ammo, row, col);
                     return true;
                 }
             }
@@ -97,15 +95,24 @@ public class Collision {
         return false;
     }
 
-    private boolean isBlockCollidable(Entity e, int row, int col) {
-        return e.getBlockValue(row, col) == 1;
+    private void checkBunkerDestroyBlocks(Entity entity, Ammo ammo, int row, int col) {
+        if (entity instanceof Bunker) {
+            if (ammo instanceof Bullet)
+                ((Bunker) entity).destroyBlocks(row, col, 1);
+            if (ammo instanceof Bomb)
+                ((Bunker) entity).destroyBlocks(row, col, 2);
+        }
     }
 
-    private boolean isAmmoCollidingWithBlock(Ammo a, Entity e, int row, int col) {
-        float x = e.getX() + col * e.getBlockWidth();
-        float y = e.getY() + row * e.getBlockHeight();
-        Rectangle entityBounds = e.getBounds(x, y, e.getBlockWidth(), e.getBlockHeight());
-        Rectangle ammoBounds = a.getBounds(a.getX(), a.getY(), a.getBlockWidth(), a.getBlockHeight());
+    private boolean isBlockCollidable(Entity entity, int row, int col) {
+        return entity.getBlockValue(row, col) == 1;
+    }
+
+    private boolean isAmmoCollidingWithBlock(Ammo ammo, Entity entity, int row, int col) {
+        float x = entity.getX() + col * entity.getBlockWidth();
+        float y = entity.getY() + row * entity.getBlockHeight();
+        Rectangle entityBounds = entity.getBounds(x, y, entity.getBlockWidth(), entity.getBlockHeight());
+        Rectangle ammoBounds = ammo.getBounds(ammo.getX(), ammo.getY(), ammo.getBlockWidth(), ammo.getBlockHeight());
         return entityBounds.intersects(ammoBounds);
     }
 

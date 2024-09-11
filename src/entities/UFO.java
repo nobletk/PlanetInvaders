@@ -10,7 +10,6 @@ import java.util.Random;
 
 public class UFO extends Entity {
     private final Color color;
-    private final int pts;
     private float velX;
     private boolean dead;
     private SoundPlayer sound;
@@ -20,8 +19,6 @@ public class UFO extends Entity {
         this.velX = velX;
         this.color = GameColors.UFO.getColor();
         this.dead = false;
-        this.pts = mysteryPts();
-
 
         this.grid = new int[][]{
                 {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0},
@@ -65,10 +62,6 @@ public class UFO extends Entity {
         this.dead = dead;
     }
 
-    public int getPoints() {
-        return pts;
-    }
-
     public void playSound() {
         sound = new SoundPlayer("src/assets/sound/ufo.wav");
         sound.setLoop(true);
@@ -84,8 +77,11 @@ public class UFO extends Entity {
         }
     }
 
-    private int mysteryPts() {
-        List<Integer> ptsList = Arrays.asList(50, 100, 150, 200, 300);
+    public int mysteryPts(int playerBulletCount) {
+        if (playerBulletCount % 23 == 0) {
+            return 300;
+        }
+        List<Integer> ptsList = Arrays.asList(50, 100, 150);
         Random rand = new Random();
         return ptsList.get(rand.nextInt(ptsList.size()));
     }

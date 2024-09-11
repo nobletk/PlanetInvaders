@@ -42,7 +42,7 @@ public class LevelManager {
         this.enemyInitY = 200f;
         this.enemyInitVelX = 0.2f;
         this.enemyInitVelY = 5f;
-        this.enemyInitIncVelX = 0.03f;
+        this.enemyInitIncVelX = 0.005f;
         this.moveSoundDelay = 700;
         this.currentLevel = 1;
         this.MAX_LEVEL = 10;
@@ -132,7 +132,7 @@ public class LevelManager {
         // lower the initial invaders spawn from 200f + 50f * 4 = 400f
         // last level should be from 500f:700f
         // invasion/game over @ 780f
-        float newEnemyY = 33 * (level - 1) + 200;
+        float newEnemyY = 33 * (level - 1) + enemyInitY;
         float newEnemyVelX = enemyInitVelX * level;
         int newMoveSoundDelay = moveSoundDelay - 60 * (level - 1);
         player = new Player(playerInitX, playerInitY);

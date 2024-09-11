@@ -17,6 +17,7 @@ import java.util.Random;
 public class EnemyManager {
     protected static int enemyRows = 5;
     protected static int enemyCols = 10;
+    private final float INVASION_THRESHOLD;
     private GameScore score;
     private int[][] enemyGrid;
     private Enemy[][] enemies = new Enemy[enemyRows][enemyCols];
@@ -36,6 +37,7 @@ public class EnemyManager {
         this.moveSoundDelay = moveSoundDelay;
         this.random = new Random();
         this.ufoCooldown = random.nextInt(1000) + 3000;
+        this.INVASION_THRESHOLD = 800f;
 
         enemyGrid = new int[][]{
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -84,6 +86,7 @@ public class EnemyManager {
         handleUFO();
         updateDeadEnemies();
         updateEnemyMovement();
+        checkInvasion();
     }
 
     public void stopMoveSound() {
@@ -146,15 +149,23 @@ public class EnemyManager {
                     e.setVelX(-e.getVelX() + e.getIncVelX());
                     e.moveDownward();
                     e.update();
-                    invasionGameOverCheck(e);
                 }
             }
         }
     }
 
-    private void invasionGameOverCheck(Enemy e) {
-        if (e.getY() == 780f) {
-            GameState.state = GameState.GAME_OVER;
+    private void checkInvasion() {
+        for (int i = enemies.length - 1; i > 0; i--) {
+            for (int j = 0; j < enemies[i].length; j++) {
+                Enemy e = enemies[i][j];
+                if (e != null) {
+                    if (e.getY() == INVASION_THRESHOLD) {
+                        GameState.state = GameState.GAME_OVER;
+                        System.out.printf("invasion %d %d\n", i, j);
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -206,7 +217,10 @@ public class EnemyManager {
 
     private void handleUFODestruction() {
         if (ufo.isDead()) {
-            score.addPoints(ufo.getPoints());
+            int bulletCount = score.getPlayerBulletCount();
+            int mysteryPts = ufo.mysteryPts(bulletCount);
+//            System.out.printf("ufoPts %d\tbulletCount %d\n", mysteryPts, bulletCount);
+            score.addPoints(mysteryPts);
         }
         ufo.stopSound();
         ufoActive = false;

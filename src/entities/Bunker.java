@@ -42,11 +42,11 @@ public class Bunker extends Entity {
         }
     }
 
-    public void destroyBlocks(int row, int col) {
-        int rowStart = Math.max(0, row - 1);
-        int rowEnd = Math.min(grid[0].length, row + 1);
-        int colStart = Math.max(0, col - 1);
-        int colEnd = Math.min(grid[0].length, col + 1);
+    public void destroyBlocks(int row, int col, int numOfBlocks) {
+        int rowStart = Math.max(0, row - numOfBlocks);
+        int rowEnd = Math.min(grid[0].length, row + numOfBlocks);
+        int colStart = Math.max(0, col - numOfBlocks);
+        int colEnd = Math.min(grid[0].length, col + numOfBlocks);
 
 
         for (int i = rowStart; i < rowEnd; i++) {

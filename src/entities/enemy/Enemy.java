@@ -8,23 +8,13 @@ public interface Enemy {
 
     float getY();
 
-    int getGridHeight();
-
-    int getGridWidth();
-
     int getWidth();
 
     int getHeight();
 
-    int[][] getGrid();
-
     int getBlockWidth();
 
     int getBlockHeight();
-
-    int getBlockValue(int i, int j);
-
-    Rectangle getBounds(float xBlock, float yBlock, int blockSize, int blockSize1);
 
     void render(Graphics g);
 

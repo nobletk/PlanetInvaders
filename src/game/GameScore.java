@@ -14,11 +14,12 @@ public class GameScore {
     private final List<Player> livesList = new ArrayList<>();
     private final int maxLives;
     private final int extraLifeThreshold;
-    private int playerScore, hiScore;
+    private int playerScore, hiScore, playerBulletCount;
     private int numOfLives;
     private boolean extraLifeGained;
 
     public GameScore() {
+        this.playerBulletCount = 0;
         this.playerScore = 0;
         this.numOfLives = 3;
         this.maxLives = 4;
@@ -76,6 +77,14 @@ public class GameScore {
         this.playerScore += pts;
     }
 
+    public void incrementPlayerBulletCount() {
+        playerBulletCount++;
+    }
+
+    public int getPlayerBulletCount() {
+        return playerBulletCount;
+    }
+
     public void removeLife() {
         numOfLives--;
         if (numOfLives == 0) {
@@ -98,6 +107,7 @@ public class GameScore {
     }
 
     public void resetScore() {
+        playerBulletCount = 0;
         playerScore = 0;
         numOfLives = 3;
         extraLifeGained = false;
