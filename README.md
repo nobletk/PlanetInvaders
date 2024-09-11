@@ -1,11 +1,9 @@
 Planet Invaders
 ___
 
-## Overview
+This is an emulation of Space Invaders written in Java.
 
 <img src="screenshot.png" width="450" alt=""> 
-
-This is an emulation of Space Invaders written in Java.
 
 ## Features
 
